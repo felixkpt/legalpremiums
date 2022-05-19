@@ -1,13 +1,11 @@
-# Lancer Community
+# Legal Premiums
 ## Detailed websites review_
 
 ## Tech
 
-Lancer Community Project uses a number of open source projects to work properly:
+Legal Premiums Project uses a number of open source projects to work properly:
 
 - [Laravel] - PHP web application framework with expressive, elegant syntax!
-- [Bootstrap] - v5.1.3
-- [Themify]
 - [Tailwind css] - A utility-first CSS framework packed.
 - [Trumbowyg Editor] - awesome web-based text editor.
 - [Flowbite js] - library of components built on top of the utility-classes
