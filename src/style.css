@@ -37,6 +37,9 @@ h3 {
 .main-btn {
     @apply py-1 px-3 bg-yellow-900 text-gray-50 hover:bg-yellow-700 rounded
 }
+.main-outline-btn {
+    @apply py-1 px-3 bg-gray-50 text-yellow-700 hover:text-gray-50 hover:bg-yellow-700 rounded border border-yellow-700
+}
 .secondary-btn {
     @apply py-1 px-3 bg-gray-50 text-gray-600 hover:text-gray-50 hover:bg-yellow-700 rounded border border-gray-200
 }

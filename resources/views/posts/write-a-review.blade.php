@@ -11,23 +11,39 @@
                 @csrf
                 <input type="hidden" name="review_id" value="{{ @$review->id }}">
                 <input type="hidden" name="post_id" value="{{ @$post->id }}">
+                <h2 >You are reviewing {{ $post->company_name }}</h2>
                 <p >Your review will help millions of consumers find trustworthy online businesses and avoid scams.</p>
                 
                 <label for="review-title" class="mt-3">Title of the review</label>
-                <input type="text" name="title" class="form-control mb-3 @error('title') is-invalid @enderror" value="{{ old('title') ?? @$review->title }}" id="review-title" placeholder="Review headline">
-                @error('title')
+                <input type="text" name="title" class="form-control mb-3 @error('title', 'review') is-invalid @enderror" value="{{ old('title') ?? @$review->title }}" id="review-title" placeholder="Review headline">
+                @error('title', 'review')
                 <div class="alert alert-danger">
-                {{ $errors->get('title')[0] }}
+                {{ $errors->review->get('title')[0] }}
                 </div>
                 @enderror
-                
-                <label for="review-textarea" class="mt-3">Your review</label>
-                <textarea name="content" rows="6" class="form-control mb-2 @error('content') is-invalid @enderror">{{ old('content') ?? @$review->content }}</textarea> (Max 500 characters)
-                @error('content')
-                <div class="alert alert-danger">
-                {{ $errors->get('content')[0] }}
+                <?php 
+                $content_count = (str_word_count(old('content')) ?: @str_word_count($review->content)) ?: 0;
+                ?>
+                <div class="mb-4">
+                    <label for="review-textarea" class="mt-3">Your review (Max {{ $max_words }} words)</label>
+                    <textarea max-words="{{ $max_words }}" name="content" rows="6" class="form-control mb-2 @error('content', 'review') is-invalid @enderror">{{ old('content') ?? @$review->content }}</textarea>Words count: <span id="wordCount">{{ $content_count }}</span>
+                    @error('content', 'review')
+                    <div class="alert alert-danger">
+                    {{ $errors->review->get('content')[0] }}
+                    </div>
+                    @enderror
                 </div>
-                @enderror
+                <script>
+                    const textarea = document.getElementsByName('content')[0];
+                    textarea.addEventListener("input", event => {
+                        const target = event.currentTarget;
+                        const maxLength = target.getAttribute("max-words");
+                        const currentLength = target.value.split(' ').length;
+
+                        document.getElementById('wordCount').innerHTML = (`${currentLength}`);
+                    });
+                </script>
+
                 <p class="mb-0">
                     <h6 class="mb-2">Overall rating</h6>
                     <input type="hidden" id="rating" name="rating" class="" value="{{ $rating ?? 0 }}">
@@ -90,7 +106,7 @@
                 <hr >
                 <div class="row">
                     <div class="col-12">
-                        <div class="row mx-1 border p-1 @error('certified') border-danger @enderror">
+                        <div class="row mx-1 border p-1 @error('certified', 'review') border-danger @enderror">
                             <div class="col-1 pr-0">
                                 <input type="checkbox" name="certified" id="agree-to-tc">
                             </div>
@@ -107,7 +123,7 @@
                 </div>
                 <hr >
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-4 mb-2">
                         <button id="btn-submit" class="btn btn-lg px-4 secondary-btn">Submit review</submit>
                     </div>
                 </div>

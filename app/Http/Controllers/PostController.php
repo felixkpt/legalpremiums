@@ -130,7 +130,9 @@ class PostController extends Controller
      * Public user writing a new post
      */
     public function writePost() {
-        return view('posts/create', ['route' => $this->route.'.store', 'method' => 'post']);
+        $title = '';
+        $description = '';
+        return view('posts/create', ['title' => $title, 'description' => $description, 'route' => $this->route.'.store', 'method' => 'post']);
     }
 
     /**

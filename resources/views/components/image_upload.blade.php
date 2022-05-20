@@ -2,16 +2,31 @@
     <div class="max-w-2xl rounded-lg shadow-xl bg-gray-50">
         <div class="m-4">
             <div class="flex items-center justify-center w-full h-64">
-                <label id="preview"
-                    class="bg-light"
-                    style="height:inherit;background-image: url('{{ @$image }}');background-repeat: no-repeat;background-size: cover;width:250px;min-height:150px">
-                    <div class="d-flex pt-7 mb-1">
-                       
-                        <p class="pt-1 text-sm tracking-wider text-gray-400 group-hover:text-gray-600">
-                            Upload company logo
-                        </p>
-                    </div>
-                    <input type="file" name="{{ $image_name ?? 'image' }}" class="d-none" id="imageInput" accept="image/*" />
+                <style>
+                    #preview {
+                        border:dashed lightblue 2px;
+                        padding: 3px;
+                        max-height: 200px;
+                        width:250px;
+                        height:150px;
+                    }
+                    #preview .inner {
+                        opacity: .7;
+                    }
+                    #preview .inner:hover {
+                        opacity: 1;
+                    }
+                </style>
+                <label class="mx-auto" id="preview" style="background: url('{{ @$image }}'), #ecf0f1;background-repeat: no-repeat;background-size: contain;background-position: center center;">
+                        <div class="inner d-flex h-100 align-items-center justify-content-center pt-7 mb-1">
+                            <div class="col-12">
+                                <div class="inline text-center">
+                                    <div><i class="ti ti-upload rounded" style="font-size:x-large;background:#dee2e6;padding:1px"></i></div>
+                                    <div><span class="rounded" style="font-size:large;background:#dee2e6;padding:1px">Upload company logo</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    <input type="file" name="{{ $image_name ?? 'image' }}" class="hidden" id="imageInput" accept="image/*" />
                 </label>
             </div>
         </div>

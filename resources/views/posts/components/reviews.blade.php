@@ -27,18 +27,18 @@
             <p class="mb-0 text-center sm:text-left">{!! $review->content !!}</p>
         </div>
         @if(Auth::user() && $review->user_id == Auth::user()->id)
-        @if($review->published == 'unapproved')
-        <div class="w-full mt-3">
-            <div class="flex flex-wrap w-full">
-                <div class="w-full md:w-9/12">
-                    <div class="alert alert-info"><strong>Info: </strong>Your review is awaiting moderation. In the mean time you can edit where necessary.</div>
-                </div>
-                <div class="w-full md:w-3/12">
-                <a class="btn btn-sm main-outline-btn" href="{{ url('add-a-review/'.$review->post_id) }}">Edit my review</a>
+            @if($review->published == 'unapproved')
+            <div class="w-full mt-3">
+                <div class="flex flex-wrap w-full">
+                    <div class="w-full md:w-9/12">
+                        <div class="alert alert-info"><strong>Info: </strong>Your review is awaiting moderation. In the mean time you can edit where necessary.</div>
+                    </div>
+                    <div class="w-full md:w-3/12">
+                    <a class="btn btn-sm main-outline-btn" href="{{ url('add-a-review/'.$review->post_id) }}">Edit my review</a>
+                    </div>
                 </div>
             </div>
-        </div>
-        @endif
+            @endif
         @endif
         @endforeach
         @if(count($reviews) < 1)

@@ -28,7 +28,7 @@
 		</div>
 		<div class="flex w-full bg-yellow-900">
 			<div class="bottom py-4">
-				<small class="text-yellow-500">Copyright @ {{ date('Y') }} {{ \Site::name() }}</small>
+				<small class="text-yellow-500">Copyright @ {{ date('Y') }} <a href="{{ url('') }}">{{ \Site::name() }}</a></small>
 			</div> 	
 		</div>
 	</div>
