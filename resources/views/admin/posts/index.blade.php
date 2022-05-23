@@ -31,7 +31,7 @@
                                     <div class="flex flex-nowrap w-full lg:w-11/12">
                                     <img class="m-1" src="{{ asset($post->image) }}" alt="" style="height:40px;width:40px">
             
-                                        <a class="truncate text-xl hover:underline" href="{{ url('company/'.$post->slug) }}">{{ Str::limit($post->title, 150) }}</a>
+                                        <a class="truncate text-xl hover:underline" href="{{ url('companies/'.$post->slug) }}">{{ Str::limit($post->title, 150) }}</a>
                                     </div>
                                 </div>
                             </td>

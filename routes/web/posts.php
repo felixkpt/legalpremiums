@@ -3,8 +3,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 
 Route::controller(PostController::class)->group(function() {
-    Route::get('company/', 'index')->name('posts');
-    Route::get('company/{slug}', 'show')->name('posts.show');
+    Route::get('companies/', 'index')->name('posts');
+    Route::get('companies/{slug}', 'show')->name('posts.show');
 });
 
 Route::middleware('auth:web')->name('write-a-review.')->prefix('/write-a-review')->group(function() {
