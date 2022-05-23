@@ -56,7 +56,8 @@ class CategorySeeder extends Seeder
                 $height = $imagesize[1];
                 // Getting image size
                 $image = get_headers($url, 1);
-                $bytes = $image["Content-Length"];
+                $bytes = $image["Content-Length"] ?? $image["content-length"];
+                dd($image);
                 $kb = round($bytes/(1024));
                 $mb = round($bytes/(1024 * 1024));
                 $size = $kb.' KB';
