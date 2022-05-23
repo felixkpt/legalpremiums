@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\ScheduleController;
 use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\UserRoleController;
+use App\Http\Controllers\Admin\MediaLibraryController;
 
 Route::middleware('permission:role-list')->name('admin.')->prefix('/admin')->group(function() {
     
@@ -133,6 +134,20 @@ Route::middleware('permission:role-list')->name('admin.')->prefix('/admin')->gro
         Route::post('/', 'store')->name('store');
         Route::patch('/{id}', 'update')->name('update');
         Route::delete('/', 'destroy')->name('destroy');
+    });
+
+    Route::name('media.')->prefix('/media')->controller(MediaLibraryController::class)->group(function() {
+        Route::get('/', 'index')->name('index')
+        ->breadcrumb('Media', 'admin.index');
+        Route::get('/create', 'create')->name('create')
+        ->breadcrumb('Create', '.index');
+        Route::get('/{id}', 'show')->name('show')
+        ->breadcrumb('Show', '.index');
+        Route::get('/{id}/edit', 'edit')->name('edit')
+        ->breadcrumb('Edit', '.index');
+        Route::post('/', 'store')->name('store');
+        Route::patch('/{id}', 'update')->name('update');
+        Route::delete('/{id}', 'destroy')->name('destroy');
     });
     
 });

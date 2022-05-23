@@ -11,14 +11,14 @@
                 <div class="flex">
                     <div class="flex px-2 border border-gray-300 w-min mr-2">{{ $key + 1 }}</div>
                     <div class="flex">
-                        <span class="text-gray-700">{{ $category->name }}</span>
+                        <span class="text-gray-700 text-lg">{{ $category->name }}</span>
                     </div>
                 </div>
                 <div class="flex w-max">
                     <a href="{{ url('admin/posts?category='.$category->slug) }}" class="text-sm text-gray-500 hover:text-gray-700 hover:underline">Posts {{ $category->name }}</a>
                 </div>
                 <div class="w-full flex flex-wrap md:justify-between">
-                    <div class="flex w-full sm:w-2/3 font-thin text-sm">
+                    <div class="flex w-full sm:w-2/3 text-base">
                         <img class="m-1" src="{{ asset($category->image) }}" alt="" style="height:40px;width:40px">
                         {!! Str::limit($category->description, 100) !!}
                     </div>

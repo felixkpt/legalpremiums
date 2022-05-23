@@ -1,7 +1,7 @@
 <div class="flex w-full flex-wrap justify-between">
     <div class="mx-auto md:w-2/12">
         <div class="overflow-hidden">
-            <img class="rounded-lg" src="{{ asset('').$post->image }}" alt="{{ $post->company_name }} logo" width="100%">
+            <img class="rounded-lg" src="{{ $post->image }}" alt="{{ $post->company_name }} logo" width="100%">
         </div>
     </div>
     <div class="w-full md:w-7/12 text-center">

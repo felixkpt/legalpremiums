@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\MediaLibrary;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\PostContent;
@@ -22,7 +23,7 @@ class PostSeeder extends Seeder
      *
      * @return void
      */
-    public function run($counts = 50)
+    public function run($counts = 20)
     {
         $this->faker = Factory::create();
 
@@ -35,7 +36,7 @@ class PostSeeder extends Seeder
             $content = '<p>'.implode('</p><p>', $this->faker->paragraphs($this->faker->numberBetween(5, 10))).'</p>';
             $title = Str::limit(ucfirst(implode(' ', $this->faker->words($this->faker->numberBetween(4, 20)))), 150);
             
-            $post = [
+            $data = [
                 'company_name' => $name,
                 'company_url' => $this->faker->url(),
                 'title' => $title,
@@ -47,21 +48,45 @@ class PostSeeder extends Seeder
             try {
                 $contents = file_get_contents('https://source.unsplash.com/random/200x200?sig=1');
 
-                $path = 'public/images/'.date('Y').'/'.date('m').'/posts/'.Str::random(16).'.jpg';
+                $path = 'public/'.date('Y').'/'.date('m').'/'.Str::random(16).'.jpg';
                 
                 Storage::put($path, $contents);
                 $path = preg_replace('#public/#', 'uploads/', $path);
-                $post['image'] = $path;
+                
+                $url = asset($path);
+                $data['image'] = $url;
+
+                // Getting image dimensions
+                $imagesize = getimagesize($url);
+                $width = $imagesize[0];
+                $height = $imagesize[1];
+                // Getting image size
+                $image = get_headers($url, 1);
+                $bytes = $image["Content-Length"];
+                $kb = round($bytes/(1024));
+                $mb = round($bytes/(1024 * 1024));
+                $size = $kb.' KB';
+                if ($mb >= 1) {
+                    $size = $mb.' MB';
+                }
+                
+                $type = 'file';
+                $mime = 'image/jpg';
+                $dat = ['user_id' => User::inRandomOrder()->first()->id, 'url' => $url, 'type' => $type, 'mime' => $mime, 'size' => $size, 'width' => $width, 'height' => $height
+            ];
+    
+                MediaLibrary::create($dat);
+
             } catch(Throwable $t) {
-                // echo $t->getMessage();
+                echo $t->getMessage();
             }
 
-            if (key_exists('image', $post) && !Post::where('title', $title)->first()) {
+            if (key_exists('image', $data) && !Post::where('title', $title)->first()) {
                 
                 try {
                     DB::beginTransaction();
 
-                    $post = Post::create($post);
+                    $post = Post::create($data);
               
                     PostContent::create(['post_id' => $post->id, 'content' => $content]);
 
@@ -81,6 +106,7 @@ class PostSeeder extends Seeder
                     
                     DB::commit();
                 } catch (Throwable $e) {
+                    echo $e->getMessage();
                     DB::rollback();
                 }
             

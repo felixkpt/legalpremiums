@@ -8,7 +8,7 @@
             </div>
             <div class="col-md-2 mt-3">
                 <div class="w-16 h-16">
-                    <img src="{{ asset(App\Models\User::where('id', $review->user_id)->first()->avatar) }}" alt="" class="user-img rounded-circle border p-1" width="100%">
+                    <img src="{{ App\Models\User::where('id', $review->user_id)->first()->avatar }}" alt="" class="user-img rounded-circle border p-1" width="100%">
                 </div>
             </div>
             <div class="col-md-10 mt-3">

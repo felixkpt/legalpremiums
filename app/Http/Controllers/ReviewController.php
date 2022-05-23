@@ -14,6 +14,7 @@ class ReviewController extends Controller
 {
 
     protected $route = 'add-a-review';
+    protected $max_words = 500;
     public function writeReview($post_id) {
         $post = Post::findOrFail($post_id);
         $user_id = Auth::user()->id;
@@ -21,9 +22,10 @@ class ReviewController extends Controller
         
         $title = 'You are writing a review on '.$post->company_name;
         $description = 'Write a review on an insurance company';
-        $data = ['title' => $title, 'description' => $description, 'post' => $post, 'review' => $review, 'route' => $this->route.'.store', 'method' => 'post', 'hide_notification' => true];
+        $data = ['title' => $title, 'description' => $description, 'post' => $post, 'review' => $review, 'route' => $this->route.'.store', 'method' => 'post', 'hide_notification' => true, 'max_words' => $this->max_words];
         return view('posts/write-a-review', $data);
     }
+    
     public function store(Request $request) {
         $author = Auth::user();
         $user_id = $author->id;
@@ -39,12 +41,16 @@ class ReviewController extends Controller
         
         $rules = [ 
             'title' => 'required|string|max:50',
-            'content' => 'required|string|min:5|max:500',
+            'content' => ['required', 'string', 
+            function ($attribute, $value, $fail) { if (str_word_count($value) <= 1) { $fail(ucfirst($attribute).' is less than 1 word'); }},
+            function ($attribute, $value, $fail) { if (str_word_count($value) >= $this->max_words) { $fail(ucfirst($attribute).' is more than '.$this->max_words.' words'); }},
+        ],
             'rating' => 'nullable|integer',
             'certified' => 'required|string'
         ];
         // 'Please confirm that you have worked with this company before.'
-        $fields = $request->validate($rules);
+        $fields = $request->validateWithBag('review', $rules);
+        
         $fields['content'] = trim($fields['content']);
         $fields = array_merge(['post_id' => $post_id,
         'user_id' => $user_id,

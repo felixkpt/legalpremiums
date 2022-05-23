@@ -4,7 +4,9 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SearchController;
-
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,23 +18,28 @@ use App\Http\Controllers\SearchController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/', function () {
+    
+    // Check if any user is registered
+    if (!User::take(1)->first()) {
+        return redirect()->route('register');
+    }else {
+        return (new HomeController)->index();
+    }
+
+})->name('home');
+
 Route::get('/search', [SearchController::class, 'index'])->name('search');
 
 require __DIR__.'/auth.php';
-require __DIR__.'/web-posts.php';
-require __DIR__.'/web-pages.php';
-require __DIR__.'/web-authors.php';
-require __DIR__.'/web-google-auth.php';
-require __DIR__.'/web-contact.php';
-require __DIR__.'/web-reviews.php';
-require __DIR__.'/web-categories.php';
 
-require __DIR__.'/web-admin.php';
+require  __DIR__.'/web/index.php';
+
 
 
 //Fallback/Catchall Route
-Route::fallback(function () {
+Route::fallback(function (Request $request) {
     $title = 'Oops! Nothing was found';
-    return view('errors.404', compact('title'));
+    $view = $request->is('admin/*') ? 'admin.errors.404' : 'errors.404';
+    return view($view, compact('title'));
 });

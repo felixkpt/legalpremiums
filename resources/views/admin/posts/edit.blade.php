@@ -1,6 +1,5 @@
 @include('/admin/templates/header')
-
-<div class="content">        
+<div class="flex flex-col px-3">   
       @include('/admin/posts/create-edit')  
 </div>
 @include('/admin/templates/footer')

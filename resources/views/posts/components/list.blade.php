@@ -4,7 +4,7 @@
     <div class="flex flex-wrap shadow p-1 mt-2">
         <div class="w-full md:w-3/12 lg:w-2/12">
             <a class="block" style="margin: auto;width: max-content;" href="{{ url('companies/'.$post->slug) }}">
-                <img class="mx-auto rounded-lg" src="{{ asset('').$post->image }}" alt="{{ $post->company_name }} logo" style="height: 120px;width:auto;">
+                <img class="mx-auto rounded-lg" src="{{ $post->image }}" alt="{{ $post->company_name }} logo" style="height: 120px;width:auto;">
             </a>
         </div>
         <div class="w-full md:w-9/12 lg:w-10/12">

@@ -53,17 +53,13 @@ class CategoryController extends Controller
             'slug' => 'max:100|unique:categories,slug',
             'parent' => 'integer',
         ];
-        if ($request->hasFile('image')) {
-            $rules = array_merge($rules, ['image' => $this->image_rules]);
-        }
+
         $request->validate($rules);
         
         $description = $request->get('description');
         $data = ['name' => $name, 'slug' => $slug, 'description' => $description, 'parent' => $request->get('parent')];
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('public/images/'.date('Y').'/'.date('m').'/categories');
-            $path = preg_replace('#public/#', 'uploads/', $path);
-            $data['image'] = $path;
+        if ($image_url = $request->get('image_url')) {
+            $data['image'] = $image_url;
         }
 
         Category::create($data);
@@ -113,18 +109,14 @@ class CategoryController extends Controller
             'slug' => 'max:100|unique:categories,slug,'.$request->id,
             'parent' => 'integer',
         ];
-        if ($request->hasFile('image')) {
-            $rules = array_merge($rules, ['image' => $this->image_rules]);
-        }
+
         $request->validate($rules);
         
         $description = $request->get('description');
     
         $data = ['name' => $name, 'slug' => $slug, 'description' => $description, 'parent' => $request->get('parent')];
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('public/images/'.date('Y').'/'.date('m').'/categories');
-            $path = preg_replace('#public/#', 'uploads/', $path);
-            $data['image'] = $path;
+        if ($image_url = $request->get('image_url')) {
+            $data['image'] = $image_url;
         }
 
         Category::find($id)->update($data);

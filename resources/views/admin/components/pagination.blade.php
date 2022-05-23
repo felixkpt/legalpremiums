@@ -1,4 +1,4 @@
-<?php $items = @($people ?: $countries ?: $items ?: $posts); 
+<?php  
 if (isset($items) && method_exists($items, 'links')) {
 ?>
 <div class="flex w-full my-8 justify-center">

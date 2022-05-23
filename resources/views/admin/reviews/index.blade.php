@@ -25,7 +25,7 @@
                     <a href="{{ url('admin/reviews?post='.$review->post->slug) }}" class="text-sm text-gray-500 hover:text-gray-700 hover:underline">Reviewing {{ $review->post->company_name }}</a>
                 </div>
                 <div class="w-full flex flex-wrap md:justify-between">
-                    <div class="flex w-full sm:w-2/3 font-thin text-sm">
+                    <div class="flex w-full sm:w-2/3 text-sm">
                         <div class="">
                             <a class="pl-1 link-default hover:underline w-full" href="{{ url('admin/reviews?author='.Str::slug($review->author->slug)) }}" class="link-yellow pl-1">{{ $review->author->name }}</a>
                             <span class="ml-2 pl-1 text-gray-400">{{ $review->created_at->diffForHumans() }}</span>

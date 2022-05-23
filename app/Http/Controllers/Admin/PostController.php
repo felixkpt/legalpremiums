@@ -16,11 +16,6 @@ use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
-    /**
-     * @param string $image_rules
-     */
-    private $image_rules = 'mimes:jpg,png,jpeg,gif|min:2|max:2024|dimensions:min_width=100,min_height=100,max_width=2000,max_height=2000';
-
     protected $post_type = 'post';
     protected $route = 'admin.posts';
     protected $perPage = 20;
@@ -67,9 +62,6 @@ class PostController extends Controller
         // The incoming request is valid....
   
         $rules = [];
-        if ($request->hasFile('image')) {
-            $rules = array_merge($rules, ['image' => $this->image_rules]);
-        }
         $request->validate($rules);
         
         $user_id = Auth::user()->id;
@@ -79,10 +71,8 @@ class PostController extends Controller
         $title = ucfirst(trim($request->post('title')));
         $content = ucfirst($request->get('content'));
         $data = ['company_name' => $company_name, 'company_url' => $company_url, 'title' => $title, 'slug' => $slug, 'description' => Str::limit(strip_tags($content), 150), 'user_id' => $user_id, 'post_type' => $this->post_type];
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('public/images/'.date('Y').'/'.date('m').'/posts');
-            $path = preg_replace('#public/#', 'uploads/', $path);
-            $data['image'] = $path;
+        if ($image_url = $request->get('image_url')) {
+            $data['image'] = $image_url;
         }
         
         try {
@@ -131,6 +121,7 @@ class PostController extends Controller
      */
     public function update(Request $request)
     {
+
         $user_id = Auth::user()->id;
         $company_name = ucfirst(trim($request->get('company_name')));
         $company_url = $request->get('company_url');
@@ -140,19 +131,14 @@ class PostController extends Controller
             'content' => 'required|string|min:3|max:2000000',
         ];
 
-        if ($request->hasFile('image')) {
-            $rules = array_merge($rules, ['image' => $this->image_rules]);
-        }
         
         $request->validate($rules);
         
         $title = ucfirst(trim($request->post('title')));
         $content = ucfirst($request->get('content'));
         $data = ['company_name' => $company_name, 'company_url' => $company_url, 'title' => $title, 'slug' => $slug, 'description' => Str::limit(strip_tags($content), 150),];
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('public/images/'.date('Y').'/'.date('m').'/posts');
-            $path = preg_replace('#public/#', 'uploads/', $path);
-            $data['image'] = $path;
+        if ($image_url = $request->get('image_url')) {
+            $data['image'] = preg_replace("#".asset('')."#", "", $image_url);
         }
         
         try {

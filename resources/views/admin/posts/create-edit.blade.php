@@ -1,8 +1,14 @@
 @include('/components/Trumbowyg-editor')
-<div class="flex flex-wrap w-full justify-center m-1">
+<div class="flex flex-wrap w-full justify-center">
     <form action="{{ route($route, ['id' => isset($post) ? $post->id : 0]) }}" method="post" class="w-full" enctype="multipart/form-data">
-        <div class="flex flex-wrap w-full justify-center m-1">
-            <div class="flex flex-col w-9/12 bg-white shadow-lg p-1">
+        <div class="flex flex-wrap w-full justify-center">
+            <div class="flex w-full justify-end">
+                <button data-collapse-toggle="cats-nav" type="button" class="mb-4 md:hidden text-gray-400 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-300 rounded-lg inline-flex mr-3 items-center justify-center" aria-controls="cats-nav" aria-expanded="false">
+                    Category menu
+                    <svg width="24" height="24"><path d="M5 6h14M5 12h14M5 18h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></svg>
+                </button>
+            </div>
+            <div class="flex flex-col w-full md:w-9/12 bg-white shadow-lg p-1 relative">
                 @csrf
                 <input type="hidden" name="_method" value="{{ $method }}">
                 <input type="hidden" name="redirect" value="{{ url()->previous() }}">
@@ -33,20 +39,27 @@
                         </div>
                     </div>
                 </div>
-                <div class="mb-4">
-                    <?php $image_name = 'image'; ?>
-                    @include('/admin/components/image_upload')
-                </div>
-                <div class="mb-4">
-                    <button class="p-2 rounded-lg bg-blue-500  text-white hover:bg-blue-700 hover:text-slate-200">Publish</button>
+                <div class="my-4">
+                    <div class="flex flex-wrap w-full justify-between">
+                        <div class="w-full md:w-1/2 h-48">
+                            <?php $image = isset($post) ? $post->image : '' ?>
+                            @include('/admin/media/components/quick-uploader')
+                        </div>
+                        <div class="w-full md:w-1/2 text-right mt-2 md:mt-auto">
+                            <button class="px-3 py-2 rounded-lg bg-blue-500  text-white hover:bg-blue-700 hover:text-slate-200">Publish</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="flex w-3/12">
-                @include('admin/categories/components/list')
+            <div id="cats-nav" class="hidden mt-8 md:mt-0 md:flex absolute md:relative z-50 md:z-0 right-0 md:w-3/12">
+                <div class="">
+                    @include('admin/categories/components/list')
+                </div>
             </div>
         </div>
     </form>
 </div>
+
 <script defer>
     jQuery(function() {
         // Open a modal box

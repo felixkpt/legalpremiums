@@ -1,5 +1,5 @@
 <?php 
-$sidebar_items = ['Posts' => 'admin/posts', 'Reviews' => 'admin/reviews', 'Pages' => 'admin/pages', 'Categories' => 'admin/categories', 'Users' => 'admin/users']
+$sidebar_items = ['Posts' => 'admin/posts', 'Reviews' => 'admin/reviews', 'Pages' => 'admin/pages', 'Categories' => 'admin/categories', 'Users' => 'admin/users', 'Media' => 'admin/media']
 ?>
 <div class="h-screen overflow-y-auto" style="position:sticky;top: 37px;;width:210px">
     <div class="flex flex-col overflow-x-hidden h-screen py-2 px-1 justify-between">
@@ -28,7 +28,7 @@ $sidebar_items = ['Posts' => 'admin/posts', 'Reviews' => 'admin/reviews', 'Pages
     </div>
 
 <script>
-    const url = window.location.href.split('?')[0].split('#')[0];
+    var url = window.location.href.split('?')[0].split('#')[0];
     let links = document.getElementById('left-nav-menu').getElementsByClassName('link');
         for(let i=0; i<links.length; i++) {
             let link = links[i];

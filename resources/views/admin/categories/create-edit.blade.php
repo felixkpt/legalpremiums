@@ -31,12 +31,16 @@
                 </textarea>
                 </div>
             </div>
-            <div class="mb-4">
-                <?php $image = isset($category) && $category->image; ?>
-                @include('/admin/components/image_upload')
-            </div>
-            <div class="mb-4">
-                <button class="p-2 rounded-lg bg-blue-500  text-white hover:bg-blue-700 hover:text-slate-200">Publish</button>
+            <div class="my-4">
+                <div class="flex flex-wrap w-full justify-between">
+                    <div class="w-full md:w-1/2 h-48">
+                        <?php $image = isset($category) ? $category->image : ''; $label = 'Category image' ?>
+                        @include('/admin/media/components/quick-uploader')
+                    </div>
+                    <div class="w-full md:w-1/2 text-right mt-2 md:mt-auto">
+                        <button class="px-3 py-2 rounded-lg bg-blue-500  text-white hover:bg-blue-700 hover:text-slate-200">Publish</button>
+                    </div>
+                </div>
             </div>
         </form>
     </div>

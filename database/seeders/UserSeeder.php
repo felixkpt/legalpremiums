@@ -34,8 +34,10 @@ class UserSeeder extends Seeder
                 $contents = file_get_contents($url);
                 $path = 'public/images/users/'.Str::random(16).'.'.pathinfo($url)['extension'];
                 Storage::put($path, $contents);
+
                 $path = preg_replace('#public/#', 'uploads/', $path);
-                
+                $post['image'] = asset($path);
+
                 if (!User::where('email', $email)->first()) {
                     
                     User::create([

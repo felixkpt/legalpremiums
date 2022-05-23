@@ -11,24 +11,25 @@
                 @csrf
                 <input type="hidden" name="review_id" value="{{ @$review->id }}">
                 <input type="hidden" name="post_id" value="{{ @$post->id }}">
-                <h2 >You are reviewing {{ $post->company_name }}</h2>
                 <p >Your review will help millions of consumers find trustworthy online businesses and avoid scams.</p>
                 
-                <label for="review-title" class="mt-3">Title of the review</label>
-                <input type="text" name="title" class="form-control mb-3 @error('title', 'review') is-invalid @enderror" value="{{ old('title') ?? @$review->title }}" id="review-title" placeholder="Review headline">
-                @error('title', 'review')
-                <div class="alert alert-danger">
-                {{ $errors->review->get('title')[0] }}
+                <div class="mb-4">
+                    <label for="review-title" class="mt-3">Title of the review</label>
+                    <input type="text" name="title" class="w-full @error('title', 'review') is-invalid @enderror" value="{{ old('title') ?? @$review->title }}" id="review-title" placeholder="Review headline">
+                    @error('title', 'review')
+                    <div class="text-red-500 bg-red-100">
+                    {{ $errors->review->get('title')[0] }}
+                    </div>
+                    @enderror
+                    <?php 
+                    $content_count = (str_word_count(old('content')) ?: @str_word_count($review->content)) ?: 0;
+                    ?>
                 </div>
-                @enderror
-                <?php 
-                $content_count = (str_word_count(old('content')) ?: @str_word_count($review->content)) ?: 0;
-                ?>
                 <div class="mb-4">
                     <label for="review-textarea" class="mt-3">Your review (Max {{ $max_words }} words)</label>
-                    <textarea max-words="{{ $max_words }}" name="content" rows="6" class="form-control mb-2 @error('content', 'review') is-invalid @enderror">{{ old('content') ?? @$review->content }}</textarea>Words count: <span id="wordCount">{{ $content_count }}</span>
+                    <textarea max-words="{{ $max_words }}" name="content" rows="6" class="w-full @error('content', 'review') is-invalid @enderror">{{ old('content') ?? @$review->content }}</textarea>Words count: <span id="wordCount">{{ $content_count }}</span>
                     @error('content', 'review')
-                    <div class="alert alert-danger">
+                    <div class="text-red-500 bg-red-100">
                     {{ $errors->review->get('content')[0] }}
                     </div>
                     @enderror
@@ -44,77 +45,79 @@
                     });
                 </script>
 
-                <p class="mb-0">
-                    <h6 class="mb-2">Overall rating</h6>
-                    <input type="hidden" id="rating" name="rating" class="" value="{{ $rating ?? 0 }}">
-                    <div id="stars" class="mb-2 row" style="cursor:pointer">
-                        <div class="col-12 col-lg-8 mb-3">
-                            @foreach($ratings as $rating_temp)
-                            <i style="font-size:24px" class="ti-star <?= ($rating_temp <= $rating)  ? 'text-lc-warning' : ('') ?>" id="{{ $rating_temp }}" title="Rate {{ $rating_temp }}/10"></i>
-                            @endforeach
-                            <span id="rating-value"></span>
-                            <script>
-                                Array.from(document.getElementsByClassName('ti-star')).forEach(function(node) {
-                                    node.addEventListener('mouseover', function() {
-                                        let val = parseInt(node.getAttribute('id'))
-                                        // adding class
-                                        for (var i=1; i<=val; i++) {
-                                            document.getElementById(i).classList.add('text-lc-warning');
-                                        }
-                                        // removing class
-                                        for (var i=val + 1; i<=10; i++) {
-                                            document.getElementById(i).classList.remove('text-lc-warning');
-                                        }
-                                        document.getElementById('rating-value').innerHTML = val+'/10';
+                <div class="mb-4">
+                    <p>
+                        <h6 class="mb-2">Overall rating</h6>
+                        <input type="hidden" id="rating" name="rating" class="" value="{{ $rating ?? 0 }}">
+                        <div id="stars" class="mb-2 flex flex-wrap w-full" style="cursor:pointer">
+                            <div class="w-full md:w-8/12">
+                                @foreach($ratings as $rating_temp)
+                                <i style="font-size:24px" class="ti-star <?= ($rating_temp <= $rating)  ? 'text-lc-warning' : ('') ?>" id="{{ $rating_temp }}" title="Rate {{ $rating_temp }}/10"></i>
+                                @endforeach
+                                <span id="rating-value"></span>
+                                <script>
+                                    Array.from(document.getElementsByClassName('ti-star')).forEach(function(node) {
+                                        node.addEventListener('mouseover', function() {
+                                            let val = parseInt(node.getAttribute('id'))
+                                            // adding class
+                                            for (var i=1; i<=val; i++) {
+                                                document.getElementById(i).classList.add('text-lc-warning');
+                                            }
+                                            // removing class
+                                            for (var i=val + 1; i<=10; i++) {
+                                                document.getElementById(i).classList.remove('text-lc-warning');
+                                            }
+                                            document.getElementById('rating-value').innerHTML = val+'/10';
+                                        })
+                                        node.addEventListener('mouseleave', function() {
+                                            let val = parseInt(document.getElementById('rating').value)
+                                            // adding class
+                                            for (var i=1; i<=val; i++) {
+                                                document.getElementById(i).classList.add('text-lc-warning');
+                                            }
+                                            // removing class
+                                            for (var i=val + 1; i<=10; i++) {
+                                                document.getElementById(i).classList.remove('text-lc-warning');
+                                            }
+                                            document.getElementById('rating-value').innerHTML = val+'/10';
+                                            document.getElementById('rating').value = val;
+                                        })
                                     })
-                                    node.addEventListener('mouseleave', function() {
-                                        let val = parseInt(document.getElementById('rating').value)
-                                        // adding class
-                                        for (var i=1; i<=val; i++) {
-                                            document.getElementById(i).classList.add('text-lc-warning');
-                                        }
-                                        // removing class
-                                        for (var i=val + 1; i<=10; i++) {
-                                            document.getElementById(i).classList.remove('text-lc-warning');
-                                        }
-                                        document.getElementById('rating-value').innerHTML = val+'/10';
-                                        document.getElementById('rating').value = val;
-                                    })
-                                })
-                                Array.from(document.getElementsByClassName('ti-star')).forEach(function (node) {
-                                    node.addEventListener('click', function() {
-                                        let val = parseInt(node.getAttribute('id'))
-                                        // adding class
-                                        for (var i=1; i<=val; i++) {
-                                            document.getElementById(i).classList.add('text-lc-warning');
-                                        }
-                                        // removing class
-                                        for (var i=val + 1; i<=10; i++) {
-                                            document.getElementById(i).classList.remove('text-lc-warning');
-                                        }
-                                        document.getElementById('rating-value').innerHTML = val+'/10';
-                                        document.getElementById('rating').value = val;
+                                    Array.from(document.getElementsByClassName('ti-star')).forEach(function (node) {
+                                        node.addEventListener('click', function() {
+                                            let val = parseInt(node.getAttribute('id'))
+                                            // adding class
+                                            for (var i=1; i<=val; i++) {
+                                                document.getElementById(i).classList.add('text-lc-warning');
+                                            }
+                                            // removing class
+                                            for (var i=val + 1; i<=10; i++) {
+                                                document.getElementById(i).classList.remove('text-lc-warning');
+                                            }
+                                            document.getElementById('rating-value').innerHTML = val+'/10';
+                                            document.getElementById('rating').value = val;
+                                        });
                                     });
-                                });
-                            </script>
+                                </script>
+                            </div>
+                            <div class="w-full md:w-4/12">
+                                <span class="ml-3 border p-2 rounded"> Click stars to rate </span>
+                            </div>
                         </div>
-                        <div class="col-12 col-lg-4">
-                            <span class="ml-3 border p-2 rounded"> Click stars to rate </span>
-                        </div>
-                    </div>
-                </p>
+                    </p>
+                </div>
                 <hr >
-                <div class="row">
-                    <div class="col-12">
-                        <div class="row mx-1 border p-1 @error('certified', 'review') border-danger @enderror">
-                            <div class="col-1 pr-0">
+                <div class="flex flex-wrap w-full">
+                    <div class="w-full">
+                        <div class="flex flex-wrap w-full mx-1 border p-1 @error('certified', 'review') border-danger @enderror">
+                            <div class="w-1/12 pr-0">
                                 <input type="checkbox" name="certified" id="agree-to-tc">
                             </div>
-                            <div class="col-md-11 pl-0">
+                            <div class="w-11/12 pl-0">
                                 <label for="agree-to-tc"> I certify that this review is based on my own experience and that I am in no way affiliated with this business, and have not been offered any incentive or payment from the business to write this review. I agree to Sitejabber’s Terms &amp; Conditions, including to not write false reviews, which is in many cases against the law. </label>
                             </div>
                             @error('certified')
-                            <div class="col-12 alert alert-danger">
+                            <div class="w-full text-red-500 bg-red-100">
                             Please confirm that you have worked with this company before.
                             </div>
                             @enderror
@@ -122,9 +125,9 @@
                     </div>
                 </div>
                 <hr >
-                <div class="row">
-                    <div class="col-md-4 mb-2">
-                        <button id="btn-submit" class="btn btn-lg px-4 secondary-btn">Submit review</submit>
+                <div class="flex flex-wrap w-full">
+                    <div class="w-4/12 mb-2">
+                        <button id="btn-submit" class="px-4 secondary-btn">Submit review</submit>
                     </div>
                 </div>
             </form>

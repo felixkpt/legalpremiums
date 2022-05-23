@@ -9,7 +9,7 @@
         "prod": "npm run production",
         "production": "mix --production",
         "build:css": "npx tailwindcss -i src/style.css -o public/css/style.css --watch",
-        "build:css.back": "npx tailwindcss -i src/admin/style.css -o public/admin/css/style.css --watch"
+        "build:css.admin": "npx tailwindcss -i src/admin/style.css -o public/admin/css/style.css --watch"
     },
     "devDependencies": {
         "@tailwindcss/forms": "^0.4.0",

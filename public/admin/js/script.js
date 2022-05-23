@@ -1,33 +1,3 @@
-window.addEventListener('load', function() {
-
-    const main = document.getElementsByTagName('main')[0]
-    if (document.getElementById('leftNav') !== null) {
-        const leftNavToggler = document.getElementById('leftNavToggler')
-        const leftNav = document.getElementById('leftNav')
-        leftNavToggler.addEventListener('click', () => {
-            leftNav.classList.toggle('hidden')
-            topNav.classList.add('hidden')
-            main.addEventListener('click', () => {
-                leftNav.classList.add('hidden')
-            })
-        })
-    }
-    const topNavToggler = document.getElementById('topNavToggler')
-    const topNav = document.getElementById('topNav')
-    topNavToggler.addEventListener('click', () => {
-        topNav.classList.toggle('hidden')
-        main.addEventListener('click', () => {
-            topNav.classList.add('hidden')
-        })
-
-        if (document.getElementById('leftNav') !== null) {
-            leftNav.classList.add('hidden')
-        }
-
-
-    })
-
-})
 
 function invalidDateRange(action = 'show') {
 if (action == 'show') {

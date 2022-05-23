@@ -9,6 +9,11 @@
     <link rel="stylesheet" href="{{ asset('admin/css/style.css?v=').date('Y.m.d-H:i:s') }}">
     <script src="{{ asset('admin/js/script.js?v=').Str::random(10) }}" async></script>
     <script src="{{ asset('admin/js/flowbite.js') }}"></script>
+    <script>
+        url = <?php echo json_encode(url('')) ?>+'/';
+        asset = <?php echo json_encode(asset('')) ?>;
+        const siteInfo = {url: url, admin_url: url+'admin', asset: asset}
+    </script>
 </head>
 <body class="bg-blue-50 dark" style="margin: 0;padding:0;" id="app">
     @include('/admin/templates/nav')

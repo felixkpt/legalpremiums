@@ -50,7 +50,12 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
-        $user->assignRole('Subscriber');
+        // Check if any user is register
+        if (User::count() == 1) {
+            $user->assignRole('Admin');
+        }else {
+            $user->assignRole('Subscriber');
+        }
 
         Auth::login($user);
 

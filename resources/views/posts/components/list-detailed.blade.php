@@ -5,7 +5,7 @@
             <div class="flex flex-wrap justify-center">
                 <a href="{{ url('companies/'.$post->slug) }}">
                 <div class="bg-light" style="max-width: 150px;height:140px">
-                    <?php $image = @getimagesize(asset($post->image)) ? asset($post->image) : asset('images/default-company.png') ?>
+                    <?php $image = @getimagesize($post->image) ? $post->image : asset('images/default-company.png') ?>
                     <img style="height: 100%;width:100%;" class="mx-auto rounded-lg" src="{{ $image }}" alt="{{ $post->company_name }} logo">
                 </div>
                 </a>
