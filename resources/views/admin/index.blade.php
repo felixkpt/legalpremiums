@@ -17,22 +17,28 @@
             </div>
 
             <div class="flex items-center bg-white shadow-sm justify-between p-5">
-                <div>
-                <div class="text-sm rounded text-gray-400">Registered users this week</div>
-                    <div class="text-3xl font-medium text-gray-600">{{ $users_this_week }}</div>
-                </div>
+                <a class="block w-full" href="{{ route('admin.users.index', ['registered-days' => 7]) }}">
+                    <div class="text-sm rounded text-gray-400">Registered users this week</div>
+                    <div class="text-3xl font-medium text-gray-600">{{ $users_this_week  }}</div>
+                </a>    
                 <div class="text-pink-500">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
+                    <a class="block w-full" href="{{ route('admin.users.index', ['registered-days' => 7]) }}">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
+                    </a>
                 </div>
             </div>
             
             <div class="flex items-center bg-white shadow-sm justify-between p-5">
-                <div>
-                <div class="text-sm rounded text-gray-400">All users</div>
-                    <div class="text-3xl font-medium text-gray-600">{{ $users_all }}</div>
+                <div class="flex-grow">
+                    <a class="block w-full" href="{{ route('admin.users.index') }}">
+                        <div class="text-sm rounded text-gray-400">All users</div>
+                        <div class="text-3xl font-medium text-gray-600">{{ $users_all }}</div>
+                    </a>
                 </div>
                 <div class="text-pink-500">
-                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    <a class="block w-full" href="{{ route('admin.users.index') }}">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    </a>
                 </div>
             </div>
 
@@ -43,7 +49,7 @@
         <div class="mt-8 grid gap-10 sm:grid-col-2 lg:grid-cols-2">
             
             <div class="flex items-center bg-white rounded shadow-sm justify-between p-5">
-                <div class="w-max">
+                <div class="flex-grow">
                     <a class="block w-full" href="{{ route('admin.posts.index') }}">
                         <div class="text-sm rounded text-gray-400">Total posts</div>
                         <div class="text-3xl font-medium text-gray-600">{{ $posts }}</div>
@@ -57,9 +63,11 @@
             </div>
 
             <div class="flex items-center bg-white shadow-sm justify-between p-5">
-                <div>
-                <div class="text-sm rounded text-gray-400">Total pages</div>
-                    <div class="text-3xl font-medium text-gray-600">{{ $pages }}</div>
+                <div class="flex-grow">
+                    <a class="block w-full" href="{{ route('admin.pages.index') }}">
+                        <div class="text-sm rounded text-gray-400">Total pages</div>
+                        <div class="text-3xl font-medium text-gray-600">{{ $pages }}</div>
+                    </a>
                 </div>
                 <div class="text-pink-500">
                     <a class="block w-full" href="{{ route('admin.pages.index') }}">
@@ -74,14 +82,16 @@
         <!-- Grid starts here -->
         <div class="mt-8 grid gap-10 sm:grid-col-2 lg:grid-cols-3">
             <div class="md:col-span-2 flex items-center bg-white rounded shadow-sm justify-between p-5">
-                <b class="flex flex-row font-bold text-gray-500">Property Release Today</b>
+                <b class="flex flex-row font-bold text-gray-500">Reviews this week</b>
                 <!-- <canvas>
                     Cnavas here
                 </canvas> -->
+                <span class="text-2xl font-medium text-gray-500">{{ $reviews_this_week }}</span>
             </div>
             <div class="flex items-center bg-white rounded shadow-sm justify-between p-5">
-                <b class="flex flex-row font-bold text-gray-500">Occupancy Percentage</b>
+                <b class="flex flex-row font-bold text-gray-500">Total Reviews</b>
                 <!-- <canvas>Another canvas</canvas> -->
+                <span class="text-2xl font-medium text-gray-500">{{ $reviews_all }}</span>
             </div>
         </div>
         <!-- Another grid ends here -->

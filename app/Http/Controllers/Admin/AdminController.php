@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Post;
 use App\Models\User;
 use App\Http\Controllers\Controller;
+use App\Models\Review;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -20,10 +21,10 @@ class AdminController extends Controller
         $users_news_letter_subscribed = range(100, 1000)[rand(600, 899)];
         $posts = Post::where('post_type', 'post')->count();
         $pages = Post::where('post_type', 'page')->count();
-
-        return view('admin/index', ['users' => $users, 
-        'page_views' => $page_views, 'users_all' => $users_all, 'users_this_week' => $users_this_week, 
-        'users_news_letter_subscribed' => $users_news_letter_subscribed, 
-        'posts' => $posts, 'pages' => $pages]);
+        
+        $reviews_this_week = count(Review::where('created_at', '>=', date('Y-m-d H:i:s', strtotime('-7 days')))->get());
+        $reviews_all = Review::count();
+        
+        return view('admin/index', get_defined_vars());
     }
 }
