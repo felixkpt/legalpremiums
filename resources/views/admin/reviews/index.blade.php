@@ -52,7 +52,7 @@
                 </div>
             </div>
             @endif
-                <?php $items = $reviews; ?>
+            <?php $items = $reviews; ?>
             @include('/admin/components/pagination')
         </div>
     </div>

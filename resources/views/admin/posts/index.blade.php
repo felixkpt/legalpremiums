@@ -71,6 +71,7 @@
             </tbody>
         </table>
     </div>
+    <?php $items = $posts ?>
     @include('/admin/components/pagination')
 </div>
 @include('/admin/templates/footer')

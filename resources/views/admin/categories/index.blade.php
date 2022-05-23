@@ -43,7 +43,7 @@
                 </div>
             </div>
             @endif
-                <?php $items = $categories; ?>
+            <?php $items = $categories; ?>
             @include('/admin/components/pagination')
         </div>
     </div>

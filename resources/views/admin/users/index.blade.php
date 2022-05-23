@@ -28,9 +28,9 @@
               <div class="text-sm font-medium text-gray-600" title="Name">
                   <a class="text-indigo-600 hover:text-indigo-900" href="{{ route('admin.users.show',$user->id) }}">{{ $user->name }}</a>
               </div>
-              <div class="flex-shrink-0 h-10 w-10">
+              <div class="flex-shrink-0 w-12 h-12">
               <a class="block w-full" href="{{ route('admin.users.show',$user->id) }}">
-                <img class="h-10 w-10 rounded-full" src="{{ $user->avatar ?? asset('images/default-user.jpg') }}" alt="">
+                <img class="w-12 h-12 rounded-full" src="{{ $user->avatar ?? asset('images/default-user.jpg') }}" alt="">
               </a>
               </div>
               <div class="text-sm text-gray-600" title="Email">{{ $user->email }}</div>
