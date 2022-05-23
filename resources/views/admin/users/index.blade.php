@@ -30,7 +30,7 @@
               </div>
               <div class="flex-shrink-0 h-10 w-10">
               <a class="block w-full" href="{{ route('admin.users.show',$user->id) }}">
-                <img class="h-10 w-10 rounded-full" src="{{ asset($user->avatar ?? 'uploads/images/users/default.jpg') }}" alt="">
+                <img class="h-10 w-10 rounded-full" src="{{ $user->avatar ?? asset('images/default-user.jpg') }}" alt="">
               </a>
               </div>
               <div class="text-sm text-gray-600" title="Email">{{ $user->email }}</div>

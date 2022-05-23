@@ -59,7 +59,7 @@ class MediaLibraryController extends Controller
             
             $file = $request->file('file');
             
-            $path = $file->store('public/'.date('Y').'/'.date('m').'/images');
+            $path = $file->store('public/'.date('Y').'/'.date('m'));
             $path = preg_replace('#public/#', 'uploads/', $path);
 
             $url = asset($path);

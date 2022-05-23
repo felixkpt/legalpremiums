@@ -18,6 +18,9 @@ class UserSeeder extends Seeder
     public function run($counts = 20)
     {
     
+        if (!User::take(1)->first()) {
+            exit('No any admin user, register first.');
+        }
         for($i=0; $i<$counts; $i++) {
                 // sleep(2);
             $person = file_get_contents('https://randomuser.me/api');
@@ -32,23 +35,27 @@ class UserSeeder extends Seeder
 
                 $url = $image;
                 $contents = file_get_contents($url);
-                $path = 'public/images/users/'.Str::random(16).'.'.pathinfo($url)['extension'];
+                $path = 'public/users/'.Str::random(16).'.'.pathinfo($url)['extension'];
                 Storage::put($path, $contents);
 
                 $path = preg_replace('#public/#', 'uploads/', $path);
-                $post['image'] = asset($path);
+                
+                $url = asset($path);
+                $post['image'] = $url;
 
                 if (!User::where('email', $email)->first()) {
                     
-                    User::create([
+                    $user =  User::create([
                         'name' => $name = trim($first_name.' '.$last_name),
                         'slug' => Str::slug($name),
                         'email' => $email,
                         'email_verified_at' => now(),
                         'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
                         'remember_token' => Str::random(10),
-                        'avatar' => $path,
+                        'avatar' => $url,
                     ]);
+
+                    $user->assignRole('Subscriber');
                     
                 }
             }
