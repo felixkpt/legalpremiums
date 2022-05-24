@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
-    <title>{{ $title ?? \Site::description() }}</title>
+    <title>{{ $title ?? \Site::title() }}</title>
     <link rel="stylesheet" href="{{ asset('admin/css/style.css?v=').date('Y.m.d-H:i:s') }}">
     <script src="{{ asset('admin/js/script.js?v=').Str::random(10) }}" async></script>
     <script src="{{ asset('admin/js/flowbite.js') }}"></script>
