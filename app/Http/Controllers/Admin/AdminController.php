@@ -17,7 +17,7 @@ class AdminController extends Controller
      */
     public function index() {
         
-        $pathname = storage_path('app');
+        $pathname = storage_path('app/public');
         $filemode = 775;
         $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($pathname), RecursiveIteratorIterator::SELF_FIRST);
         foreach($iterator as $item) {
