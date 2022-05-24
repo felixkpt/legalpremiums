@@ -123,9 +123,11 @@ class UserController extends Controller
         $rules = [
             'name' => 'required',
             'email' => 'required|email|unique:users,email,'.$id,
-            'password' => 'same:confirm-password',
             'roles' => 'required'
         ];
+        if ($request->get('confirm-password')) {
+            $rules['password'] = ['same:confirm-password'];
+        }
         if ($request->hasFile('avatar')) {
             $rules['avatar'] = $this->image_rules;
         }
