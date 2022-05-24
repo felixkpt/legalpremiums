@@ -62,7 +62,7 @@ class UserController extends Controller
 
         $input['slug'] = Str::slug($request->name);
         if ($request->hasFile('avatar')) {
-            $path = $request->file('avatar')->store('public/images/users');
+            $path = $request->file('avatar')->store('public/users');
             $path = preg_replace('#public/#', 'uploads/', $path);
             $input['avatar'] = $path;
         }
@@ -132,7 +132,7 @@ class UserController extends Controller
 
         $input['slug'] = Str::slug($request->name);
         if ($request->hasFile('avatar')) {
-            $path = $request->file('avatar')->store('public/images/users');
+            $path = $request->file('avatar')->store('public/users');
             $path = preg_replace('#public/#', 'uploads/', $path);
             $input['avatar'] = $path;
         }
