@@ -1,8 +1,8 @@
 @include('/templates/header')
-<div class="col">
+<div class="flex flex-col px-3">
     <div class="card">
         <h1 class="col">{{ $title }}</h1>
-        <div class="col">
+        <div class="flex flex-col px-3">
             @include('/categories/components/list')
         </div>
     </div>

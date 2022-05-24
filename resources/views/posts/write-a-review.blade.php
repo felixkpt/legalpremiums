@@ -1,5 +1,5 @@
 @include('templates/header')
-<div class="col">
+<div class="flex flex-col px-3">
     <div class="row justify-content-center p-1 p-md-3">
         <div class="card px-4 text-start">
             <?php 

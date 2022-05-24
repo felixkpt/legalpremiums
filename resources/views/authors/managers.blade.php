@@ -1,5 +1,5 @@
 @include('/templates/header')
-<div class="col">
+<div class="flex flex-col px-3">
     <div class="card mb-4 p-1 p-lg-3">
         <div class="row">
             <div class="col-12">
