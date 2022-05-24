@@ -70,14 +70,14 @@ class PostController extends Controller
      */
     public function store(StorePostRequest $request) {
         // The incoming request is valid....
-  
+   
         $rules = [];
         $request->validate($rules);
         
         $user_id = Auth::user()->id;
         $company_name = ucfirst(trim($request->get('company_name')));
         $company_url = $request->get('company_url');
-        $slug = Str::of($company_name)->slug('-')->value();
+        $slug = Str::of($request->post('slug') ?? $company_name)->slug('-')->value();
         $title = ucfirst(trim($request->post('title')));
         $content = ucfirst($request->get('content'));
         $data = ['company_name' => $company_name, 'company_url' => $company_url, 'title' => $title, 'slug' => $slug, 'description' => Str::limit(strip_tags($content), 150), 'user_id' => $user_id, 'post_type' => $this->post_type];
@@ -133,17 +133,19 @@ class PostController extends Controller
     {
 
         $user_id = Auth::user()->id;
-        $company_name = ucfirst(trim($request->get('company_name')));
-        $company_url = $request->get('company_url');
-        $slug = Str::of($company_name)->slug('-')->value();
         $rules = [
             'company_name' => 'required|string|min:3|max:150|unique:posts,company_name,'.$request->id,
+            'title' => 'required|string|min:3|max:150|unique:posts,title,'.$request->id,
+            'slug' => 'nullable|string|min:3|max:150|unique:posts,slug,'.$request->id,
             'content' => 'required|string|min:3|max:2000000',
         ];
 
-        
         $request->validate($rules);
         
+        $company_name = ucfirst(trim($request->get('company_name')));
+        $company_url = $request->get('company_url');
+        $slug = Str::of($request->post('slug') ?? $company_name)->slug('-')->value();
+                
         $title = ucfirst(trim($request->post('title')));
         $content = ucfirst($request->get('content'));
         $data = ['company_name' => $company_name, 'company_url' => $company_url, 'title' => $title, 'slug' => $slug, 'description' => Str::limit(strip_tags($content), 150),];

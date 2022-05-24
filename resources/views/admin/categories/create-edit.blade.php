@@ -10,7 +10,7 @@
                 <input type="text" id="title" class="w-full" name="name" value="{{ old('name') ?: @$category->name }}">
             </div>
             <div class="mb-4 w-full">
-                <label for="slug">Slug </label>
+                <label for="slug">Slug (optional)</label>
                 <input type="text" id="slug" class="w-full" name="slug" value="{{ old('slug') ?: @$category->slug }}">
                 <small class="text-gray-500">The “slug” is the URL-friendly version of the name. It is usually all lowercase and contains only letters, numbers, and hyphens.</small>
             </div>

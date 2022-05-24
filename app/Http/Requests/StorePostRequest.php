@@ -27,6 +27,8 @@ class StorePostRequest extends FormRequest
 
         return [
             'company_name' => 'required|string|min:3|max:150|unique:posts,company_name',
+            'title' => 'required|string|min:3|max:150|unique:posts,title',
+            'slug' => 'nullable|string|min:3|max:150|unique:posts,slug',
             'content' => 'required|string|min:3|max:2000000',
         ];
     }

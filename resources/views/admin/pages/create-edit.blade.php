@@ -24,6 +24,11 @@
                 <input type="text" id="title" class="w-full" name="title" value="{{ old('title') ?: @$post->title }}">
             </div>
             <div class="mb-4 w-full">
+                <label for="slug">Slug (optional)</label>
+                <input type="text" id="slug" class="w-full" name="slug" value="{{ old('slug') ?: @$post->slug }}">
+                <small class="text-gray-500">The “slug” is the URL-friendly version of the name. It is usually all lowercase and contains only letters, numbers, and hyphens.</small>
+            </div>
+            <div class="mb-4 w-full">
                 <label for="content">Content </label>
                 <div class="w-full">
                     <div id="editor" class="trumbowyg-editor" contenteditable="true" dir="ltr" style="height: 224.922px;">
