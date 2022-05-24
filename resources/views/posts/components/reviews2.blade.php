@@ -13,19 +13,7 @@
             </div>
             <div class="col-md-10 mt-3">
                 <h4 class="mb-1">{{ $review->title }}</h4>
-                <p>
-                    @if($review->rating > 0)
-                    <small>
-                    <?php $ratings = range(1,10); ?>
-                    @foreach($ratings as $rating)
-                    <i class="ti-star <?php if ($rating <= $review->rating) echo 'text-lc-warning' ?>"></i>
-                    @endforeach
-                    </small>  {{ $review->rating }}/10
-                    @else
-                    <small class="text-lc-warning">No rating</small>
-                    @endif 
-                    <span class="ml-3 text-muted"> Reviewed {{ $review->updated_at->diffForHumans() }}, by <a href="">{{ App\Models\User::where('id', $review->user_id)->first()->name }}</a></span>
-                </p>
+                @include('/posts/components/review-stars')
                 <p class="mb-0">{!! $review->content !!}</p>
             </div>
             @if(Auth::user() && $review->user_id == Auth::user()->id)
