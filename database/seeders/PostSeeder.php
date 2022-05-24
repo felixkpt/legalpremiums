@@ -91,14 +91,20 @@ class PostSeeder extends Seeder
                     PostContent::create(['post_id' => $post->id, 'content' => $content]);
 
                     // Attaching authors (post_user table)
-                    $take = [1,1,1,1,2,2,3];
+                    $take_arr = [1,1,1,1,2,2,3];
+                    shuffle($take_arr);
+                    $take = $take_arr[0];
+
                     $users = User::inRandomOrder()->take($take)->pluck('id');
                     
                     $manager_id = $users[rand(0, count($users) - 1)];
                     foreach ($users as $user) {
                         $post->authors()->attach($user, ['manager_id' => $manager_id]);
                     }
+                    
                     // Attaching categories
+                    shuffle($take_arr);
+                    $take = $take_arr[0];
                     $categories = Category::inRandomOrder()->take($take)->pluck('id');
                     foreach($categories as $category) {
                         $post->categories()->attach($category);

@@ -12,7 +12,7 @@
             </div>
             @endif
         @elseif(!Auth::user() || !App\Models\Review::where('post_id', $post->id)->where('user_id', Auth::user()->id)->first())
-        <a href="{{ url('add-a-review/'.$post->id) }}" class="btn btn-lg main-outline-btn"><small><i class="ti-comment-alt mr-2"></i></small> Leave a Review </a>
+        <a href="{{ url('add-a-review/'.$post->id) }}" class="main-outline-btn"><small><i class="ti-comment-alt mr-2"></i></small> Leave a Review </a>
         @endif
     </div>
 </div>

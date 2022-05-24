@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Post;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\PostContent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -32,10 +33,19 @@ class PostController extends Controller
             if (!$author) {
                 return redirect()->back()->with('warning', 'Whoops! Author not found.');
             }
-        $posts = Post::where('post_type', $this->post_type)->whereHas('author', function($q) use($author) {
-                $q->where([['post_user.user_id', $author->id], ['post_user.manager_id', $author->id]]);
+            $posts = Post::where('post_type', $this->post_type)->whereHas('author', function($q) use($author) {
+                $q->where([['post_user.user_id', $author->id]]);
             })->orderBy('updated_at', 'desc')->paginate($this->perPage);
             $posts->appends(['author' => $slug]);   
+        }elseif ($slug = $request->get('category')) {
+            $category = Category::where('slug', $slug)->first();
+            if (!$category) {
+                return redirect()->back()->with('warning', 'Whoops! Category not found.');
+            }
+            $posts = Post::where('post_type', $this->post_type)->whereHas('category', function($q) use($category) {
+                $q->where([['post_category.category_id', $category->id]]);
+            })->orderBy('updated_at', 'desc')->paginate($this->perPage);
+            $posts->appends(['category' => $slug]);   
         }else {
             $posts = Post::where('post_type', $this->post_type)->with('authors')->orderBy('updated_at', 'desc')->paginate($this->perPage);
         }

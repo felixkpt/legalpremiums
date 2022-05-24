@@ -31,7 +31,7 @@
                                     <div class="flex flex-nowrap w-full lg:w-11/12">
                                     <img class="m-1" src="{{ asset($post->image) }}" alt="" style="height:40px;width:40px">
             
-                                        <a class="truncate text-xl hover:underline" href="{{ url('companies/'.$post->slug) }}">{{ Str::limit($post->title, 150) }}</a>
+                                        <a class="truncate text-xl hover:underline" href="{{ url('company/'.$post->slug) }}">{{ Str::limit($post->title, 150) }}</a>
                                     </div>
                                 </div>
                             </td>
@@ -63,7 +63,11 @@
             <tr>
                 <td>
                     <div class="p-4 bg-gray-100 text-xl sm:text-3xl flex flex-col md:flex-row items-baseline">
-                    <span class="flex p-1">No posts created yet!</span> <a class="flex p-1 text-purple-500 text-lg sm:text-xl font-medium" href="{{ route('admin.posts.create') }}">Start writing your first post now...</a>
+                    @if(!\request()->get('category'))
+                    <span class="flex p-1">No posts created yet.</span> <a class="flex p-1 text-purple-500 text-lg sm:text-xl font-medium" href="{{ route('admin.posts.create') }}">Start writing your first post now...</a>
+                    @else
+                    <span class="flex p-1">No posts in this category.</span>
+                    @endif
                     </div>
                 </td>
             </tr>

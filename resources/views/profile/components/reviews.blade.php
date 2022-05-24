@@ -3,14 +3,21 @@
         @foreach($reviews as $review)
         <div class="w-full">
             <hr>
+            <h4 class="text-lg font-medium">
+                <a class="text-yellow-500 hover:text-yellow-700" href="{{ url('companies/'.$review->post->slug) }}">
+                Reviewing {{ $review->post->company_name }}
+                </a>
+            </h4>
         </div>
-        <div class="w-full md:w-2/12 mt-3 md:pr-2">
-            <div class="w-32 h-32 md:w-4/5 md:h-4/5 mb-2 mx-auto rounded-full">
-                <img class="rounded-full" src="{{ asset(App\Models\User::where('id', $review->user_id)->first()->avatar) }}" alt="" class="user-img rounded-circle border p-1" width="100%">
+        <div class="w-full sm:w-3/12 lg:w-2/12 mt-3 md:pr-2">
+            <div class="w-32 h-32 md:w-4/5 md:h-4/5 mb-2 mx-auto rounded">
+                <a href="{{ url('companies/'.$review->post->slug) }}">
+                    <img class="w-32 h-32 rounded" src="{{ $review->post->image }}" alt="" class="user-img rounded-circle border p-1" width="100%">
+                </a>
             </div>
         </div>
-        <div class="w-full md:w-10/12 mt-3">
-            <h4 class="mb-1 text-xl font-medium text-center sm:text-left">{{ $review->title }}</h4>
+        <div class="w-full sm:w-9/12 lg:w-10/12 mt-3">
+            <h4 class="mb-1 text-xl text-center sm:text-left">{{ $review->title }}</h4>
             <div class="flex flex-wrap mb-2">
                 <div class="w-full md:w-6/12 text-center md:text-left">
                     @if($review->rating > 0)
@@ -56,4 +63,3 @@
     <?php $items = $reviews; ?>
     @include('/components/pagination')
 </div>
-

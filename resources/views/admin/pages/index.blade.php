@@ -50,7 +50,7 @@
                 <tr>
                     <td>
                         <div class="p-4 bg-gray-100 text-xl sm:text-3xl flex flex-col md:flex-row items-baseline">
-                        <span class="flex p-1">No pages created yet!</span> <a class="flex p-1 text-purple-500 text-lg sm:text-xl font-medium" href="{{ route('admin.pages.create') }}">Start writing your first page now...</a>
+                        <span class="flex p-1">No pages created yet.</span> <a class="flex p-1 text-purple-500 text-lg sm:text-xl font-medium" href="{{ route('admin.pages.create') }}">Start writing your first page now...</a>
                         </div>
                     </td>
                 </tr>

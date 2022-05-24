@@ -99,7 +99,7 @@
         <div class="mt-8 border-t-2 border-gray-300 font-bold text-gray-600">
             <div class="flex w-full justify-between py-1">
                 <span>Clients</span>
-                <a class="bg-white rounded-lg py-1 transition ease-in-out duration-1000 px-8 text-white bg-purple-500 hover:bg-purple-700 hover:text-white" href="{{ route('admin.users.index') }}">View all</a>
+                <a class="bg-white rounded-lg py-1 transition ease-in-out duration-1000 px-8 text-white bg-cyan-500 hover:bg-cyan-600 hover:text-white" href="{{ route('admin.users.index') }}">View all</a>
             </div>
         </div>
         <div class="grid gap-3 lg:grid-cols-2">

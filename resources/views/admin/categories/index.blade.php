@@ -15,12 +15,12 @@
                     </div>
                 </div>
                 <div class="flex w-max">
-                    <a href="{{ url('admin/posts?category='.$category->slug) }}" class="text-sm text-gray-500 hover:text-gray-700 hover:underline">Posts {{ $category->name }}</a>
+                    <a href="{{ url('admin/posts?category='.$category->slug) }}" class="text-sm text-gray-500 hover:text-gray-700 hover:underline">Posts in this category</a>
                 </div>
                 <div class="w-full flex flex-wrap md:justify-between">
                     <div class="flex w-full sm:w-2/3 text-base">
                         <img class="m-1" src="{{ asset($category->image) }}" alt="" style="height:40px;width:40px">
-                        {!! Str::limit($category->description, 100) !!}
+                        {{ Str::limit(strip_tags($category->description), 100) }}
                     </div>
                     <div class="flex justify-between w-auto text-slate-700 dark:text-slate-500 h-max">
                         <a class="flex bg-purple-500 hover:bg-purple-800 rounded-lg font-thin text-center px-8 mr-1 text-white" href="{{ url('admin/categories/'.$category->id.'/edit') }}">Edit</a>

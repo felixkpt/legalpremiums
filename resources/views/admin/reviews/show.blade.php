@@ -20,7 +20,7 @@
                     <a class="pl-1 link-default hover:underline w-full" href="{{ url('admin/reviews?author='.Str::slug($review->author->slug)) }}" class="link-yellow pl-1">{{ $review->author->name }}</a>
                 </div>
                 <div class="flex justify-between w-auto text-slate-700 dark:text-slate-500 h-max">
-                    <a class="flex bg-purple-500 hover:bg-purple-800 rounded-lg font-thin text-center px-8 mr-1 text-white" href="{{ url('companies/'.App\Models\Post::where('id', $review->post_id)->first()->slug) }}">View post</a>
+                    <a class="flex bg-purple-500 hover:bg-purple-800 rounded-lg font-thin text-center px-8 mr-1 text-white" href="{{ url('company/'.App\Models\Post::where('id', $review->post_id)->first()->slug) }}">View post</a>
                     <form action="{{ route('admin.reviews.destroy') }}" method="post">
                         @csrf
                         <input type="hidden" name="_method" value="delete">
