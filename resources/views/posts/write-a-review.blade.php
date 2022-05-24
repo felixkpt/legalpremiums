@@ -1,6 +1,6 @@
 @include('templates/header')
 <div class="flex flex-col px-3">
-    <div class="row justify-content-center p-1 p-md-3">
+    <div class="w-full">
         <div class="card px-4 text-start">
             <?php 
             $ratings = range(1,10);
