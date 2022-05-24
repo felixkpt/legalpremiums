@@ -36,7 +36,7 @@
             @endif
         @endif
         @endforeach
-        @if(count($reviews) < 1)
+        @if(count($reviews) < 1 && $post)
         <div class="w-full text-muted">
             No reviews yet @if(!Auth::user() || !in_array(Auth::user()->id, array_column(json_decode(json_encode($post->authors), true), 'id')) )<a href="{{ url('add-a-review/'.$post->id) }}">Review {{ $post->company_name }} now</a>@endif
         </div>
