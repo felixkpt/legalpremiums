@@ -64,7 +64,7 @@ class UserController extends Controller
         if ($request->hasFile('avatar')) {
             $path = $request->file('avatar')->store('public/users');
             $path = preg_replace('#public/#', 'uploads/', $path);
-            $input['avatar'] = $path;
+            $input['avatar'] = asset($path);
         }
 
         $input['password'] = Hash::make($input['password']);
@@ -134,7 +134,7 @@ class UserController extends Controller
         if ($request->hasFile('avatar')) {
             $path = $request->file('avatar')->store('public/users');
             $path = preg_replace('#public/#', 'uploads/', $path);
-            $input['avatar'] = $path;
+            $input['avatar'] = asset($path);
         }
     
         if(!empty($input['password'])){ 
