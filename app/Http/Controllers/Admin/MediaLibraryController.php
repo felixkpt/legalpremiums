@@ -59,7 +59,11 @@ class MediaLibraryController extends Controller
             
             $file = $request->file('file');
             
-            $path = $file->store('public/'.date('Y').'/'.date('m'));
+            $dir = 'public/'.date('Y').'/'.date('m');
+            
+            $path = $file->store($dir);
+            chmod(storage_path('app/'.date('Y')),0775);
+            chmod(storage_path('app/'.$dir),0775);
             $path = preg_replace('#public/#', 'uploads/', $path);
 
             $url = asset($path);
@@ -77,7 +81,6 @@ class MediaLibraryController extends Controller
             if ($mb >= 1) {
                 $size = $mb.' MB';
             }
-            
             
             $type = $file->getType();
             $mime = $file->getMimeType();
