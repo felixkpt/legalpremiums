@@ -5,7 +5,7 @@
             <div class="flex items-center justify-center w-full h-64">
                 <label id="preview"
                     class="flex flex-col w-full border-4 border-blue-200 border-dashed hover:bg-gray-100 hover:border-gray-300"
-                    style="height:inherit;background-image: asset('{{ @$image }}');background-repeat: no-repeat;background-size: cover;">
+                    style="height:inherit;background-image: url('{{ @$image }}');background-repeat: no-repeat;background-size: cover;">
                     <div class="flex flex-col items-center justify-center pt-7">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-gray-400 group-hover:text-gray-600"
                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
