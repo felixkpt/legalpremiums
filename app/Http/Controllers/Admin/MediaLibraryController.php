@@ -138,7 +138,8 @@ class MediaLibraryController extends Controller
         $redirect = $request->redirect ?? url('admin/media');
         
         $media = MediaLibrary::findOrFail($request->id);
-        Storage::delete(preg_replace("#uploads#", "public", $media->first()->url));
+        $existing_path = preg_replace("#".asset('uploads')."#", "public", $media->first()->url);
+        Storage::delete($existing_path);
         $media->delete();
         return redirect($redirect)->with('success', 'File was deleted.');
     }

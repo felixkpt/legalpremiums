@@ -2,6 +2,7 @@
     
 namespace App\Http\Controllers\Admin;
 
+use Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -138,6 +139,9 @@ class UserController extends Controller
  
             $path = preg_replace('#public/#', 'uploads/', $path);
             $input['avatar'] = asset($path);
+            // Delete old image if exists
+            $existing_path = preg_replace("#".asset('uploads')."#", "public", User::find($id)->avatar);
+            Storage::delete($existing_path);
         }
     
         if(!empty($input['password'])){ 
