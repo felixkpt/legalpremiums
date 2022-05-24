@@ -18,7 +18,7 @@
 			</div>
 			<div class="flex flex-wrap">
 				<h3 class="text-2xl text-gray-50 font-medium w-full">External links</h3>
-				<p class="text-gray-400 font-medium">
+				<p class="text-gray-400">
 					<div class="flex flex-wrap w-full h-min">
 						@include('/components/social-media-links')
 					</div>

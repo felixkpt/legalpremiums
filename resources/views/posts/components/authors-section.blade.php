@@ -1,8 +1,6 @@
 <div class="font-bold">
         <div class="flex">
         <div class="flex text-gray-700 text-base">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg><span><a href="https://demo.mythemeshop.com/ad-sense-viral/author/mythemeshop/" title="Posts by MyThemeShop" rel="author">
-
             <?php 
     $authors = json_decode(json_encode($post->mainAuthors), true);
     
@@ -14,7 +12,12 @@
     });
     ?>
     @foreach($authors as $author)
-        <a class="link-green pl-1" href="{{ url('authors/'.Str::slug($author['name'])) }}" class="link-yellow pl-1">{{ $author['name'] }}</a>@if(isset($authors[$loop->index+1])),@endif
+        <a class="link-green pl-1" href="{{ url('authors/'.Str::slug($author['name'])) }}">
+            <div class="inline w-8 h-8 rounded-full">
+                <img class="inline w-8 h-8 rounded-full" src="{{ $author['avatar'] ?? asset('images/default-user.png') }}" alt="">
+            </div>
+            {{ $author['name'] }}
+        </a>@if(isset($authors[$loop->index+1])),@endif
     @endforeach
 
             </a></span>

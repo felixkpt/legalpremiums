@@ -1,15 +1,10 @@
-<style>
-    .
-
-</style>
 <div class="mb-1">
-    
     <div class="space-y-2 md:px-2">
         @foreach($trending as $trend)
         <?php $post = method_exists($trend, 'post') ? $trend->post()->first() : $trend;
         ?>
-        <div class="post-box">
-            <div class="post-img trending">
+        <div class="post-box flex flex-col items-center">
+            <div class="post-img trending w-64 lg:w-auto mx-auto">
                 <a href="{{ url('companies/'.$post->slug) }}">
                     <img width="100%" height="100" src="{{ asset($post->image) }}" alt="">
                     <div class="post-format-icons">
@@ -17,7 +12,7 @@
                     </div>
                 </a>
             </div>
-            <div class="post-data">
+            <div class="post-data mx-auto">
                 <h4 class="text-lg font-bold text-gray-600 hover:text-yellow-700">
                     <a href="{{ url('companies/'.$post->slug) }}">{{ Str::limit($post->title, 100) }}</a>
                 </h4>

@@ -29,8 +29,8 @@ class HomeController extends Controller
         }
 
         $categories = Category::latest()->limit(8)->get();
-        $posts = Post::latest()->limit(5)->get();
-        $reviews = Review::latest()->limit(4)->get();
+        $posts = Post::latest()->limit(6)->get();
+        $reviews = Review::latest()->limit(5)->get();
 
         $slider_title = 'Search To Know If A Website Is Safe';
         $description = $slider_description = Site::description();

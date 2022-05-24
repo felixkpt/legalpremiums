@@ -56,11 +56,12 @@
         @include('/templates/nav')
         <main>
             <div class="flex flex-wrap w-full">
-                <div class="w-full mb-3">
-                    <h1 class="text-3xl font-bold text-yellow-700">{{ $title }}</h1>
+                <div class="w-full mb-8">
+                    <h1 class="text-3xl font-bold text-yellow-700 mb-1">{{ $title }}</h1>
                     @if(Route::is('posts.show'))
-                        @include('/posts/components/authors-section')
+                    @include('/posts/components/authors-section')
                     @endif
+                    <hr class="my-1">
                 </div>
-                <div class="w-full md:w-9/12">
+                <div class="w-full lg:w-9/12">
                     <div class="w-full">
