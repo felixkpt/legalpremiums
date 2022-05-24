@@ -62,10 +62,7 @@ class UserController extends Controller
 
         $input['slug'] = Str::slug($request->name);
         if ($request->hasFile('avatar')) {
-            $dir = 'public/users';
-            
-            $path = $request->file('avatar')->store($dir);
-            chmod(storage_path('app/'.$dir),0775);
+            $path = $request->file('avatar')->store('public/users');
             $path = preg_replace('#public/#', 'uploads/', $path);
             $input['avatar'] = asset($path);
         }
@@ -135,14 +132,11 @@ class UserController extends Controller
 
         $input['slug'] = Str::slug($request->name);
         if ($request->hasFile('avatar')) {
-            $dir = 'public/users';
-            
-            $path = $request->file('avatar')->store($dir);
-            chmod(storage_path('app/'.$dir),0775);
+            $path = $request->file('avatar')->store('public/users');
             $path = preg_replace('#public/#', 'uploads/', $path);
             $input['avatar'] = asset($path);
         }
-
+    
         if(!empty($input['password'])){ 
             $input['password'] = Hash::make($input['password']);
         }else{

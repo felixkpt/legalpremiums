@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+use RecursiveIteratorIterator;
+use RecursiveDirectoryIterator;
 use App\Models\Post;
 use App\Models\User;
 use App\Http\Controllers\Controller;
@@ -14,6 +16,13 @@ class AdminController extends Controller
      * @return Response
      */
     public function index() {
+        
+        $pathname = storage_path('app');
+        $filemode = 775;
+        $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($pathname), RecursiveIteratorIterator::SELF_FIRST);
+        foreach($iterator as $item) {
+            chmod($item, $filemode);
+        }
         $users = User::orderBy('id','DESC')->paginate(4);
         $users_all = User::count();
         $page_views = range(50, 1000)[rand(240, 949)];

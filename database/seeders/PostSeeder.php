@@ -48,11 +48,9 @@ class PostSeeder extends Seeder
             try {
                 $contents = file_get_contents('https://source.unsplash.com/random/200x200?sig=1');
 
-                $dir = 'public/'.date('Y').'/'.date('m');
-                $path = $dir.'/'.Str::random(16).'.jpg';
+                $path = 'public/'.date('Y').'/'.date('m').'/'.Str::random(16).'.jpg';
                 
                 Storage::put($path, $contents);
-                chmod(storage_path('app/'.$dir),0775);
                 $path = preg_replace('#public/#', 'uploads/', $path);
                 
                 $url = asset($path);
