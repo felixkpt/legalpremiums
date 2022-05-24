@@ -62,7 +62,7 @@ class MediaLibraryController extends Controller
             $dir = 'public/'.date('Y').'/'.date('m');
             
             $path = $file->store($dir);
-            chmod(storage_path('app/'.date('Y')),0775);
+            chmod(storage_path('app/public/'.date('Y')),0775);
             chmod(storage_path('app/'.$dir),0775);
             $path = preg_replace('#public/#', 'uploads/', $path);
 
