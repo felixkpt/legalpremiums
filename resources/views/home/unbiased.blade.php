@@ -1,6 +1,6 @@
 <div class="container-fluid py-3 py-lg-4 bg-white">
     <div class="container">
-        <div class="row">
+        <div class="flex flex-wrap w-full">
             <div class="col-md-7 align-self-center">
                 <h2 class="mb-3"> Unbiased Reviews by Real Users of Freelance Writing Service </h2>
                 <p> Have a project that needs the help of a freelancer? Be it a programming task, social media management, blog content writing or a press release, you need an expert that will actually enable you get value for your money. We are among the

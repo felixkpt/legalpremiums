@@ -1,6 +1,6 @@
 <div class="container-fluid bg-light list-businesses py-3 py-lg-4">
     <div class="container text-center">
-        <div class="row">
+        <div class="flex flex-wrap w-full">
             <div class="col-md-12 mb-3">
                 <h2>Browse businesses by more categories</h2>
                 <p class="lead"> We has over 50 categories to search through which makes it easy to find the business you need </p>

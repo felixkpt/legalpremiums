@@ -1,8 +1,8 @@
-<div class="row">
+<div class="flex flex-wrap w-full">
     @foreach($reviews as $review)
     <div class="col-12 col-md-6">
-        <div class="row">
-            <div class="col-12">
+        <div class="flex flex-wrap w-full">
+            <div class="w-full">
                 <hr>
                 <a class="text-left" href="{{ url('companies/'.$review->post->slug) }}"><h5>Reviewing {{ $review->post->company_name }}</h5></a>
             </div>
@@ -19,7 +19,7 @@
             @if(Auth::user() && $review->user_id == Auth::user()->id)
             @if($review->published == 'unapproved')
             <div class="col-12 mt-3">
-                <div class="row">
+                <div class="flex flex-wrap w-full">
                     <div class="col-12 col-md-9">
                         <div class="alert alert-info"><strong>Info: </strong>Your review is awaiting moderation. In the mean time you can edit where necessary.</div>
                     </div>
