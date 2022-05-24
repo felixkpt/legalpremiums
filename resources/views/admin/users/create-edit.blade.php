@@ -1,4 +1,3 @@
-<?php $image = @asset($user->avatar); $image_name = 'image'; ?>
 {!! Form::model($user, ['method' => $method,'route' => [$route, @$user->id], 'enctype' => 'multipart/form-data']) !!}
 <div class="grid gap-8 sm:grid-cols-2">
     <div class="">
@@ -28,6 +27,7 @@
     <div class="mx-auto sm:mx-0">
         <div class="flex flex flex-col w-3/4 sm:w-2/3 justify-center md:justify-end">
             <label class="flex text-gray-600 font-medium">User Avatar:</label>
+            <?php $image = $user->avater; $name = 'avatar'; ?>
             @include('/admin/components/image_upload')
         </div>
     </div>

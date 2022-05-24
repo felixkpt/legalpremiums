@@ -136,7 +136,7 @@ class UserController extends Controller
             $path = preg_replace('#public/#', 'uploads/', $path);
             $input['avatar'] = asset($path);
         }
-    
+
         if(!empty($input['password'])){ 
             $input['password'] = Hash::make($input['password']);
         }else{

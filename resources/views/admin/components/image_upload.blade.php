@@ -1,3 +1,4 @@
+<?php $image_name = $image_name ?? @$name; ?>
 <div class="">
     <div class="max-w-2xl rounded-lg shadow-xl bg-gray-50">
         <div class="m-4">
