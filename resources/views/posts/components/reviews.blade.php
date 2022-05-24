@@ -4,15 +4,22 @@
         <div class="w-full">
             <hr>
         </div>
-        <div class="w-full md:w-2/12 mt-3 md:pr-2">
-            <div class="w-32 h-32 md:w-4/5 md:h-4/5 mb-2 mx-auto rounded-full">
-                <img class="rounded-full" src="{{ asset(App\Models\User::where('id', $review->user_id)->first()->avatar) }}" alt="" class="user-img rounded-circle border p-1" width="100%">
+        <div class="w-full md:w-2/12 mt-3 md:pr-2 overflow-hidden">
+            <?php $user = App\Models\User::where('id', $review->user_id)->first() ?>
+            <div class="w-24 h-24 md:w-4/5 md:h-3/5 mb-2 mx-auto rounded-full">
+            <a href="{{ url('profile/'.$user->slug) }}">
+                <img class="w-24 h-24 rounded-full" src="{{ asset(App\Models\User::where('id', $review->user_id)->first()->avatar) }}" alt="" class="user-img rounded-circle border p-1" width="100%">
+            </a>
             </div>
+            <div class="w-full text-center pt-2">
+                <a class="text-yellow-500 hover:text-yellow-700" href="{{ url('profile/'.$user->slug) }}">{{ $user->name }}</a>
+            </div>
+
         </div>
         <div class="w-full md:w-10/12 mt-3">
-            <h4 class="mb-1 text-xl font-medium text-center sm:text-left">{{ $review->title }}</h4>
+            <h4 class="mb-1 text-xl font-medium text-center md:text-left">{{ $review->title }}</h4>
             @include('/posts/components/review-stars')
-            <p class="mb-0 text-center sm:text-left">{!! $review->content !!}</p>
+            <p class="mb-0 text-center md:text-left">{!! $review->content !!}</p>
         </div>
         @if(Auth::user() && $review->user_id == Auth::user()->id)
             @if($review->published == 'unapproved')

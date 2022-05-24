@@ -1,5 +1,5 @@
 <div class="flex flex-wrap mb-2">
-    <div class="w-full md:w-6/12 text-center md:text-left">
+    <div class="w-full md:w-8/12 text-center md:text-left">
         @if($review->rating > 0)
         <small>
         <?php $ratings = range(1,5); ?>
@@ -11,8 +11,12 @@
         <small class="text-lc-warning">No rating</small>
         @endif 
     </div>
-    <div class="w-full md:w-6/12 text-center md:text-left">
+    <div class="w-full md:w-4/12 text-center md:text-left">
         <?php $user = App\Models\User::where('id', $review->user_id)->first() ?>
-        <span class="text-gray-500"> Reviewed {{ $review->updated_at->diffForHumans() }}, by <a class="text-yellow-500 hover:text-yellow-700" href="{{ url('profile/'.$user->slug) }}">{{ $user->name }}</a></span>
+        <div class="flex flex-wrap">
+            <div class="w-full">
+                <span class="text-gray-500"> Reviewed {{ $review->updated_at->diffForHumans() }}</span>
+            </div>            
+        </div>
     </div>
 </div>
