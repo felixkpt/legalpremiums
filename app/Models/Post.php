@@ -63,7 +63,6 @@ class Post extends Model
         ->withTimestamps();
     }
 
-
     /**
      * Categories relationship method
      * 1 to many (One post can belong to one or more Categories)

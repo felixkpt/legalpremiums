@@ -26,6 +26,7 @@ class PageController extends Controller
      */
     public function index(Request $request)
     {
+        $title = 'All Pages';
         if ($slug = $request->get('author')) {
             $author = User::where('slug', $slug)->first();
             if (!$author) {
@@ -34,12 +35,15 @@ class PageController extends Controller
             $posts = Post::where('post_type', $this->post_type)->whereHas('author', function($q) use($author) {
                 $q->where([['post_user.user_id', $author->id], ['post_user.manager_id', $author->id]]);
             })->orderBy('updated_at', 'desc')->paginate($this->perPage);
-            $posts->appends(['author' => $slug]);   
+            $posts->appends(['author' => $slug]);
+            $title = 'All Pages by '.$author->name.' ('.$posts->total().')';
+
         }else {
             $posts = Post::where('post_type', $this->post_type)->with('authors')->orderBy('updated_at', 'desc')->paginate($this->perPage);
+            $title = 'All Pages ('.Post::where('post_type', $this->post_type)->count().')';
         }
         
-        return view($this->route.'.index', ['posts' => $posts, 'route' => $this->route]);
+        return view($this->route.'.index', ['posts' => $posts, 'route' => $this->route, 'title' => $title]);
     }
 
     /**

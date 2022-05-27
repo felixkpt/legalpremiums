@@ -22,6 +22,10 @@ class CategoryController extends Controller
      */
     public function index()
     {
+        if (Category::count() === 0) {
+            Category::create(['name' => 'Uncategorized', 'slug' => 'uncategorized']);
+        }
+
         $categories = Category::paginate($this->perPage);
         $data = ['categories' => $categories];
         return view('admin/categories/index', $data);
@@ -104,6 +108,7 @@ class CategoryController extends Controller
 
         $name = $request->get('name');
         $slug = Str::of($request->get('slug') ?? $name)->slug('-')->value();
+
         $rules = [
             'name' => 'required|max:100|unique:categories,name,'.$request->id,
             'slug' => 'max:100|unique:categories,slug,'.$request->id,
@@ -132,6 +137,11 @@ class CategoryController extends Controller
      */
     public function destroy(Request $request)
     {
+        // cannot change uncategorized name or slug
+        if ($request->id == 1) {
+            return redirect()->back()->with('danger', 'Cannot delete default category');
+        }
+
         Category::find($request->get('id'))->delete();
         return redirect()->back()->with('danger', 'Category deleted');
     }

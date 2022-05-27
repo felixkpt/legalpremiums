@@ -28,6 +28,8 @@ class PostController extends Controller
      */
     public function index(Request $request)
     {
+        $title = 'All Posts';
+
         if ($slug = $request->get('author')) {
             $author = User::where('slug', $slug)->first();
             if (!$author) {
@@ -36,7 +38,9 @@ class PostController extends Controller
             $posts = Post::where('post_type', $this->post_type)->whereHas('author', function($q) use($author) {
                 $q->where([['post_user.user_id', $author->id]]);
             })->orderBy('updated_at', 'desc')->paginate($this->perPage);
-            $posts->appends(['author' => $slug]);   
+            $posts->appends(['author' => $slug]);
+            $title = 'All Posts by '.$author->name.' ('.$posts->total().')';
+   
         }elseif ($slug = $request->get('category')) {
             $category = Category::where('slug', $slug)->first();
             if (!$category) {
@@ -45,12 +49,15 @@ class PostController extends Controller
             $posts = Post::where('post_type', $this->post_type)->whereHas('category', function($q) use($category) {
                 $q->where([['post_category.category_id', $category->id]]);
             })->orderBy('updated_at', 'desc')->paginate($this->perPage);
-            $posts->appends(['category' => $slug]);   
+            $posts->appends(['category' => $slug]);
+            $title = 'All Posts in the category '.$category->name.' ('.$posts->total().')';
+   
         }else {
             $posts = Post::where('post_type', $this->post_type)->with('authors')->orderBy('updated_at', 'desc')->paginate($this->perPage);
+            $title = 'All Posts ('.Post::where('post_type', $this->post_type)->count().')';
         }
         
-        return view($this->route.'.index', ['posts' => $posts, 'route' => $this->route]);
+        return view($this->route.'.index', ['posts' => $posts, 'route' => $this->route, 'title' => $title]);
     }
 
     /**
@@ -150,12 +157,12 @@ class PostController extends Controller
         $content = ucfirst($request->get('content'));
         $data = ['company_name' => $company_name, 'company_url' => $company_url, 'title' => $title, 'slug' => $slug, 'description' => Str::limit(strip_tags($content), 150),];
         if ($image_url = $request->get('image_url')) {
-            $data['image'] = preg_replace("#".asset('')."#", "", $image_url);
+            $data['image'] = $image_url;
         }
         
         try {
             DB::beginTransaction();
-        
+
             $post = Post::where('post_type', $this->post_type)->find($request->id);
             $post->update($data);
             PostContent::where('post_id', $post->id)->update(['content' => $content]);

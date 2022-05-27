@@ -18,7 +18,8 @@ class PostController extends Controller
     private $image_rules = 'mimes:jpg,png,jpeg,gif|min:2|max:2024|dimensions:min_width=100,min_height=100,max_width=2000,max_height=2000';
     protected $route = 'write-a-review';
     private $post_type = 'post';
-    private $perPage = 5;
+    private $perPage = 20;
+    private $reviewsPerPage = 10;
     /**
      * Showing all posts
      */
@@ -59,34 +60,42 @@ class PostController extends Controller
         if (!$post) {
             return redirect()->back()->with('warning', 'Whoops! Not found.');
         }
-
+        
         // user can view their post while it awaits moderation
-        if (Auth::user() && in_array(Auth::user()->id, array_column(json_decode(json_encode($post->authors), true), 'id')) ) {
+        if (Auth::user() && in_array(Auth::user()->id, array_column($post->authors->toArray(), 'id')) ) {
             $post = Post::where('post_type', 'post')->where('slug', '=', $slug)->first();
         }else{
             $post = Post::where('post_type', 'post')->where('slug', '=', $slug)->where('published', 'published')->first();
+            if (!$post) {
+                return redirect()->back()->with('warning', 'Whoops! Not found.');
+            }
         }
-        
-        $reviews = Review::whereHas('post', function($q) use($post) {
-            $q->where([['reviews.post_id', $post->id]]);
-        })->orderBy('updated_at', 'desc')->paginate($this->perPage);
+
+        // user can view their review while it awaits moderation
+        if ($user = Auth::user()) {
+            $reviews = Review::where([['published', 'published'], ['post_id', $post->id]])->orWhere([['post_id', $post->id], ['user_id', $user->id]])->whereHas('post', function($q) use($post) {
+                $q->where([['reviews.post_id', $post->id]]);
+            })->orderBy('updated_at', 'desc')->paginate($this->reviewsPerPage);
+        }else {
+            $reviews = Review::where('published', 'published')->whereHas('post', function($q) use($post) {
+                $q->where([['reviews.post_id', $post->id]]);
+            })->orderBy('updated_at', 'desc')->paginate($this->reviewsPerPage);
+        }
         $reviews->fragment('reviews');
         
         $title = $post->title;
         $description = $post->description;
         
         $this->updateRating($post);
-        $related = $this->related($post);
-        $trending = Review::orderby('updated_at', 'desc')->limit(5)->get();
-        // dd($trending);
-        $data = ['title' => $title, 'description' => $description, 'post' => $post, 'post_type' => $this->post_type, 'reviews' => $reviews, 'related' => $related, 'trending' => $trending];
+        
+        $data = ['title' => $title, 'description' => $description, 'post' => $post, 'post_type' => $this->post_type, 'reviews' => $reviews];
         return view('posts/show', $data);
     }
 
-    private function updateRating($post) {
+    private function updateRating(&$post) {
         
         $post_id = $post->id;
-        $reviews = Review::whereHas('post', function($q) use($post) {
+        $reviews = Review::where('published', 'published')->whereHas('post', function($q) use($post) {
             $q->where([['reviews.post_id', $post->id]]);
         })->orderBy('updated_at', 'desc')->get();
 
@@ -105,24 +114,11 @@ class PostController extends Controller
         }
 
         if ($post->reviews != $ct && $post->rating != $rating) {
-            Post::find($post_id)->update(['reviews' => $ct, 'rating' => $rating,]);
+            $post = Post::find($post_id);
+            $post->update(['reviews' => $ct, 'rating' => $rating,]);
         }
 
-    }
-
-    /** 
-     * Related posts
-     */
-
-    public function related($post) {
-        $categories = $post->categories->toArray();
-        if (count($categories) > 0) {
-            $categories = array_column($categories, 'id');
-            $posts = Post::where('post_type', 'post')->whereHas('category', function($q) use($categories) {
-                $q->where('post_category.category_id','>', $categories);
-            })->orderBy('updated_at', 'desc')->paginate($this->perPage);
-            return $posts;
-        }
+        return $post;
 
     }
 
@@ -130,9 +126,7 @@ class PostController extends Controller
      * Public user writing a new post
      */
     public function writePost() {
-        $title = '';
-        $description = '';
-        return view('posts/create', ['title' => $title, 'description' => $description, 'route' => $this->route.'.store', 'method' => 'post']);
+        return view('posts/create', ['route' => $this->route.'.store', 'method' => 'post']);
     }
 
     /**
@@ -217,7 +211,7 @@ class PostController extends Controller
                  DB::rollback();
              }
      
-             return redirect()->to('companies/'.$post->slug)->with('success', 'Company review was '.($post_id ? 'updated.' : 'created'));
+             return redirect()->to('company/'.$post->slug)->with('success', 'Company review was '.($post_id ? 'updated.' : 'created'));
                 
     }
 

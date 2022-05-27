@@ -23,7 +23,7 @@ class ReviewController extends Controller
         $title = 'You are writing a review on '.$post->company_name;
         $description = 'Write a review on an insurance company';
         $data = ['title' => $title, 'description' => $description, 'post' => $post, 'review' => $review, 'route' => $this->route.'.store', 'method' => 'post', 'hide_notification' => true, 'max_words' => $this->max_words];
-        return view('posts/write-a-review', $data);
+        return view('posts/reviews/create', $data);
     }
     
     public function store(Request $request) {
@@ -56,10 +56,10 @@ class ReviewController extends Controller
         'user_id' => $user_id,
         ], $fields);
         //  Review not pubished until approved by admin
-        if (!Auth::user()->can('role-list')) {
-            $fields['published'] = 'unapproved';
-         }
-
+        if (Auth::user()->can('role-list')) {
+            $fields['published'] = 'published';
+        }
+        
          $review = Review::where('post_id', $post_id)->where('user_id', $user_id)->first();
         $msg = 'Review has been added.';
         if (!$review) {

@@ -11,15 +11,19 @@
         <div class="grid gap-2 grid-cols-1 md:grid-cols-3 lg:grid-cols-5" id="content">
             @if (isset($media) && count($media) > 0)
             @foreach ($media as $item)
-            <div class="flex justify-center bg-gray-400 single-image-parent" style="height:180px">
-                <a class="flex md:w-full single-image" href="{{ url('admin/media/'.$item->id) }}" data="{{ $item }}">
-                <img style="height:100%;width:100%" src="{{ url($item->url) }}" alt="">
-                </a>
+            <div class="flex flex-col bg-gray-400 single-image-parent">
+                <div style="height:180px;width:180px;overflow:hidden">
+                    <a class="flex md:w-full single-image" href="{{ url('admin/media/'.$item->id) }}" data="{{ $item }}">
+                        <img style="height:100%;width:100%" src="{{ url($item->url) }}" alt="">
+                    </a>
+                </div>
             </div>
             @endforeach
             @else
-            <div class="flex justify-center single-image-parent" style="height:180px">
-                <span class="text-gray-300 md:text-xl">No uploaded media yet</span>
+            <div class="flex flex-col bg-gray-400 single-image-parent">
+                <div style="height:180px;width:180px;overflow:hidden">
+                    <span class="text-gray-300 md:text-xl">No uploaded media yet</span>
+                </div>
             </div>
             @endif
 
@@ -32,7 +36,7 @@
 </div>
 <div class="media-modal-wrapper-item hidden py-4" id="currentMediaSectionModal">
     <div class="flex flex-col justify-center h-full items-center">
-        <div class="flex flex-col media-modal-item bg-gray-500 shadow-lg rounded w-11/12 md:w-6/12">
+        <div class="flex flex-col media-modal-item bg-gray-500 shadow-lg rounded w-11/12 md:w-7/12">
             @include('/admin/media/components/show')
         </div>
     </div>
@@ -48,32 +52,50 @@
         uploadSection.classList.remove('hidden')
         mediaSection.classList.add('hidden')
     })
+    // Media switch click listener
     mediaSwitch.addEventListener('click', function () {
         mediaSection.classList.remove('hidden')
         uploadSection.classList.add('hidden')
-        updateMedia(siteInfo.url+'admin/media')
+        if (typeof quickUploader === 'undefined') { 
+            updateMedia(siteInfo.url+'admin/media')
+        }else {
+            updateMedia(siteInfo.url+'admin/media', true, false)
+        }
     })
 
     paginationSection.addEventListener('click', function (event) {
         event.preventDefault()
         if (url = event.target.getAttribute('href')) {
-            updateMedia(url, true)
+        
+            if (typeof quickUploader === 'undefined') { 
+                updateMedia(url, true)
+            }else {
+                updateMedia(url, true, false)
+            }
+
         }
     })
 
-
-    function updateMedia(url, scrollToTop = false) {
+    function updateMedia(url, scrollToTop = false, pushState = true) {
         const xhr = new XMLHttpRequest()
         xhr.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
                 if (scrollToTop) {
-                    var mediaTop = document.querySelector('#mediaTop')
-                    mediaTop.scrollIntoView({ behavior: 'smooth'})
+                    
+                    if (typeof quickUploader === 'undefined') {
+                        var mediaTop = document.querySelector('body')
+                        mediaTop.scrollIntoView({ behavior: 'smooth'})
+
+                    }else {
+                        var mediaTop = document.querySelector('#mediaTop')
+                        mediaTop.scrollIntoView({ behavior: 'smooth'})
+                    }
 
                 }
                 const items = JSON.parse(this.response)
-                const mediaData = items.data
-
+                const media = items.media
+                const mediaData = media.data
+                
                 if (mediaData.length < 1) {
                     return
                 }
@@ -82,19 +104,41 @@
                 mediaData.forEach(function (data) {
 
                     let item = document.createElement('div')
-                    item.classList.add('flex', 'justify-center', 'bg-gray-400', 'single-image-parent')
-                    item.style = "height:180px"
-                    item.innerHTML = `<a class="flex md:w-full single-image" href="${url}admin/media/${data.id}" data='${JSON.stringify(data)}'>
-                <img style="height:100%;width:100%" src="${data.url}" alt="">
-                </a>`
+                    item.classList.add('flex', 'flex-col', 'bg-gray-400', 'single-image-parent')
+                    
+                    let imageWrapper = document.createElement('div')
+                    imageWrapper.style = "height:180px;width:180px;overflow:hidden"
+                    imageWrapper.classList.add('mx-auto')
+                    let link = document.createElement('a')
+                    link.setAttribute('href', `${siteInfo.url}admin/media/${data.id}`)
+                    link.setAttribute('data', `${JSON.stringify(data)}`)
+                    link.classList.add(`block`, `md:w-full`, `h-full`, `single-image`)
+                    
+                    let img = document.createElement('img')
+                    img.style = `width:100%;height:100%!important`
+                    img.src = `${data.url}`
+                    
+                    link.append(img)
+                    imageWrapper.append(link)
+                    item.append(imageWrapper)
+
                     document.querySelector("#mediaSection").querySelector('#content').append(item);
                 })
+                // update title
+                let title = items.title
+                document.getElementById('title').textContent = title
+                document.querySelector('title').textContent = title
+                // update url too
+                if (pushState) {
+                    history.pushState({}, '', url)
+                }
+                // add class hidden to .media-modal-wrapper-item just incase it is open
+                document.querySelector('.media-modal-wrapper-item').classList.add('hidden')
 
-                
-                if ( items.next_page_url ) {
+                if ( media.next_page_url ) {
                     var paginationInner = document.createElement('div')
                     paginationInner.classList.add('flex', 'w-full', 'my-8', 'justify-center')
-                    var pagination = getPagination(items)
+                    var pagination = getPagination(media)
                     paginationInner.append(pagination)
                     document.getElementById('paginationSection').innerHTML = ''
                     document.getElementById('paginationSection').classList.remove('hidden')
@@ -113,10 +157,14 @@
 
     const mediaContent = document.querySelector('#mediaSection').querySelector('#content')
     mediaContent.addEventListener('click', function (event) {
-        if (event.target.closest('.single-image')) {
+        if (event.target.closest('a.single-image')) {
             event.preventDefault()
             let target = event.target.closest('.single-image');
             singleImage(target.getAttribute('data'))
+        }else if(event.target.closest('a.busy')) {
+            event.preventDefault()
+        }else if(event.target.closest('a.not-allowed')) {
+            event.preventDefault()
         }
     })
 
@@ -156,5 +204,19 @@
         return pagination
     }
 
-updateMedia(siteInfo.url+'admin/media')
+    // when show singleImage uploade by link is clicked
+    document.querySelector('#author a').addEventListener('click', function ( e ) {
+        e.preventDefault()
+        if (typeof quickUploader === 'undefined') { 
+            updateMedia(this.getAttribute('href'), true)
+        }else {
+            updateMedia(this.getAttribute('href'), true, false)
+        }
+    })
+
+    if (typeof quickUploader === 'undefined') {
+        updateMedia(siteInfo.fullUrl)
+    }else {
+        updateMedia(siteInfo.url+'admin/media', false, false)
+    }
 </script>

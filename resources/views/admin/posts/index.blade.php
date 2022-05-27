@@ -1,8 +1,13 @@
 @include('/admin/templates/header')    
 <div class="flex flex-col px-3">
 
-    <div class="flex justify-end overflow-hidden w-auto text-left border-b-2 border-gray-300 pb-2">
-        <a href="{{ url('admin/posts/create') }}" class="text-white rounded py-2 px-4 bg-cyan-500 hover:bg-cyan-600">Create a new</a>
+    <div class="flex justify-between overflow-hidden w-auto text-left border-b-2 border-gray-300 pb-2">
+        <div class="flex">
+            <h2 class="text-2xl" id="title">{{ $title }}</h2>
+        </div>
+        <div class="flex my-auto">
+            <a href="{{ url('admin/posts/create') }}" class="text-white rounded py-2 px-4 bg-cyan-500 hover:bg-cyan-600">Create a new</a>
+        </div>
     </div>
     <div class="bg-gray-50 mt-2 shadow rounded-lg">
         <table class="table-fixed w-full">
@@ -29,7 +34,7 @@
                                     </div>
                                     <div class="flex px-2 border border-gray-300 w-min mr-2">{{ ($key + 1) }}</div>
                                     <div class="flex flex-nowrap w-full lg:w-11/12">
-                                    <img class="m-1" src="{{ asset($post->image) }}" alt="" style="height:40px;width:40px">
+                                    <img class="m-1" src="{{ isset($post->image) ? $post->image : asset('images/default-company.png') }}" alt="" style="height:40px;width:40px">
             
                                         <a class="truncate text-xl hover:underline" href="{{ url('companies/'.$post->slug) }}">{{ Str::limit($post->title, 150) }}</a>
                                     </div>
@@ -63,10 +68,12 @@
             <tr>
                 <td>
                     <div class="p-4 bg-gray-100 text-xl sm:text-3xl flex flex-col md:flex-row items-baseline">
-                    @if(!\request()->get('category'))
-                    <span class="flex p-1">No posts created yet.</span> <a class="flex p-1 text-purple-500 text-lg sm:text-xl font-medium" href="{{ route('admin.posts.create') }}">Start writing your first post now...</a>
-                    @else
+                    @if(\request()->get('category'))
                     <span class="flex p-1">No posts in this category.</span>
+                    @elseif (\request()->get('author'))
+                    <span class="flex p-1">No posts published by selected author.</span>
+                    @else
+                    <span class="flex p-1">No posts published yet.</span> <a class="flex p-1 text-purple-500 text-lg sm:text-xl font-medium" href="{{ route('admin.posts.create') }}">Start writing your first post now...</a>
                     @endif
                     </div>
                 </td>

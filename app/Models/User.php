@@ -54,6 +54,12 @@ class User extends Authenticatable
     public function posts() {
         return $this->belongsToMany(Post::class, 'post_user', 'user_id', 'post_id');
     }
+    /**
+     * Defining the relationship between a user and review
+     */
+    public function reviews() {
+        return $this->hasMany(Review::class, 'user_id');
+    }
 
     public function sendPasswordResetNotification($token)
     {

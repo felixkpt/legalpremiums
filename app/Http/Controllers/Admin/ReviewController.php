@@ -18,6 +18,7 @@ class ReviewController extends Controller
      */
     public function index(Request $request)
     {
+        $ititle = 'All reviews';
         if ($slug = $request->get('author')) {
             $author = User::where('slug', $slug)->first();
             if (!$author) {
@@ -25,6 +26,7 @@ class ReviewController extends Controller
             }
             $reviews = Review::where('user_id', $author->id)->orderBy('updated_at', 'desc')->paginate($this->perPage);
             $reviews->appends(['author' => $author->slug]);
+            $title = 'Reviews by '.$author->name.' ('.$reviews->total().')';
 
         } elseif($slug = $request->get('post')) {
             $post = Post::where('slug', $slug)->first();
@@ -33,11 +35,13 @@ class ReviewController extends Controller
             }
             $reviews = Review::where('post_id', $post->id)->orderBy('updated_at', 'desc')->paginate($this->perPage);
             $reviews->appends(['post' => $post->slug]);
+            $title = 'Reviews for '.$post->company_name.' ('.$reviews->total().')';
 
         } else {
             $reviews = Review::orderBy('updated_at', 'desc')->paginate($this->perPage);
+            $title = 'All reviews ('.Review::count().')';
         }
-        return view('admin/reviews/index', ['reviews' => $reviews]);
+        return view('admin/reviews/index', ['reviews' => $reviews, 'title' => $title]);
     }
 
     /**
@@ -65,7 +69,10 @@ class ReviewController extends Controller
      */
     public function destroy(Request $request)
     {
-        $review = Review::findOrFail($request->get('id'))->delete();
+        Review::findOrFail($request->get('id'))->delete();
+        if ($redirect = $request->get('redirect')) {
+            return \redirect()->to($redirect)->with('success', 'Review deleted.');
+        }
         return \redirect()->back()->with('success', 'Review deleted.');
     }
 }

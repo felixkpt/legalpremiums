@@ -1,26 +1,36 @@
 <?php use Illuminate\Support\Facades\Request; ?>
-<div class="my-2 w-full flex justify-center">
-    <div class="flex flex-col w-full">
+<div class="w-full flex flex-col justify-center bg-gray-500 rounded" id="show-media">
+    @if (!isset($single_media))
+    <div class="flex justify-end w-full mb-2">
+        <span title="Close" class="close">
+            <svg  class="w-6 h-6  text-gray-100" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        </span>
+    </div>
+    @endif
+    <div class="flex flex-col w-full p-2">
         <div class="flex">
-            <label class="text-gray-50 mx-2 border-2 border-gray-100 p-1 rounded" for="text" id="copy">Copy</label>
-            <input class="w-full mr-2 rounded" type="readonly" id="text" value="{{ isset($media_item) ? asset($media_item->url) : '' }}">
+            <label class="text-gray-50 border-2 border-gray-100 mr-2 py-1 px-2 rounded" for="text" id="copy" data-purpose="{{ isset($purpose) ? $purpose : 'Copy' }}">Copy</label>
+            <input class="w-full rounded" type="readonly" id="text" value="{{ isset($media_item) ? asset($media_item->url) : '' }}">
         </div>
         <div class="flex justify-center mt-2">
             <div class="flex flex-col justify-center md:w-2/3">
                 <div class="flex w-full justify-center" style="min-height: 80px ;">
                     <img style="width: auto;" src="{{ isset($media_item) ? asset($media_item->url) : '' }}" alt="" id="image">
                 </div>
-                <div class="flex flex-col justify-center w-full bg-gray-200 rounded mt-2">
+                <div class="flex flex-col justify-center w-full bg-gray-200 rounded mt-2 px-1">
                     <div class="flex w-full justify-center">
-                        <p class="text-gray-600 font-normal">Image type: <span id="type">{{ isset($media_item) ? $media_item->type : '' }}</span></p>
+                        <p class="text-gray-600 font-normal">Image type: <span id="type">{{ isset($media_item) ? $media_item->mime : '' }}</span></p>
                     </div>
                     <div class="flex w-full justify-center">
-                        <p class="text-gray-500 font-normal">Uploaded <span id="uploaded">{{ isset($media_item) ? $media->created_at->diffForHumans() : '' }}</span> by <span class="text-sky-500" id="author">{{ isset($media_item) ? $media->author->name : '' }}</span></p>
+                        <p class="text-gray-600 font-normal">Image size: <span id="size">{{ isset($media_item) ? $media_item->size : '' }}</span></p>
+                    </div>
+                    <div class="flex w-full justify-center">
+                        <p class="text-gray-500 font-normal">Uploaded <span id="uploaded">{{ isset($media_item) ? $media->created_at->diffForHumans() : '' }}</span> by <span class="text-sky-500" id="author"><a href="{{ isset($media_item) ? url('admin/media?author='.$media->author->slug) : '' }}">{{ isset($media_item) ? $media->author->name : '' }}</a></span></p>
                     </div>
                 </div>
                 <div class="flex w-full justify-between mt-2">
                     <a href="{{ isset($media_item) ? asset($media_item->url) : '#' }}" id="link" class="bg-blue-500 text-gray-100 font-bold hover:bg-blue-700 pointer rounded-lg p-1 mr-1" target="_blank">View full image</a>
-                    <form action="{{ isset($media_item) ? route('admin.media.destroy', $media_item->id) : '' }}" method="post" class="flex">
+                    <form action="{{ isset($media_item) ? url('admin/media/'.$media_item->id) : '' }}" method="post" class="flex">
                         @csrf
                         @method('delete')
                         <input type="hidden" name="redirect" value="" id="redirect">
@@ -35,52 +45,74 @@
 
 function singleImage(item) {
     item = JSON.parse(item)
-    var url = <?php echo json_encode(url('')) ?>;
-    var currentUri = <?php echo json_encode(Request::url()) ?>;
-
+   
     document.getElementById('currentMediaSectionModal').classList.remove('hidden')
 
-    document.querySelectorAll('#currentMediaSectionModal #text')[0].value = item.url
-    document.querySelectorAll('#currentMediaSectionModal #text')[0].select()
-    copy.style = 'border-color:#ccc'
-    copy.innerHTML = 'Copy'
+    document.querySelector('#currentMediaSectionModal #text').value = item.url
+    document.querySelector('#currentMediaSectionModal #text').select()
 
-    document.querySelectorAll('#currentMediaSectionModal #link')[0].setAttribute('href', item.url)
-    document.querySelectorAll('#currentMediaSectionModal #image')[0].setAttribute('src', item.url)
-    document.querySelectorAll('#currentMediaSectionModal #type')[0].innerHTML = item.type;
+    document.querySelector('#currentMediaSectionModal #link').setAttribute('href', item.url)
+    document.querySelector('#currentMediaSectionModal #image').setAttribute('src', item.url)
+    document.querySelector('#currentMediaSectionModal #type').innerHTML = item.type;
+    document.querySelector('#currentMediaSectionModal #size').innerHTML = item.size;
     let date = new Date(item.created_at)
     let time = date.toLocaleTimeString();
     date = date.toLocaleDateString();
-    document.querySelectorAll('#currentMediaSectionModal #uploaded')[0].innerHTML = ' on '+date+' at '+time;
-    document.querySelectorAll('#currentMediaSectionModal #author')[0].innerHTML = item.author.name;
-    document.querySelectorAll('#currentMediaSectionModal form')[0].setAttribute('action', `${url}/admin/media/${item.id}`)
-    document.querySelectorAll('#currentMediaSectionModal #redirect')[0].value = currentUri;
+    document.querySelector('#currentMediaSectionModal #uploaded').textContent = ' on '+date+' at '+time;
+    document.querySelector('#currentMediaSectionModal #author a').textContent = item.author.name;
+    document.querySelector('#currentMediaSectionModal #author a').setAttribute('href', `${siteInfo.url}admin/media?author=${item.author.slug}`);
+    document.querySelector('#currentMediaSectionModal form').setAttribute('action', `${siteInfo.url}admin/media/${item.id}`)
+    document.querySelector('#currentMediaSectionModal #redirect').value = siteInfo.fullUrl;
     
 }
 
-const copy = document.querySelectorAll('#currentMediaSectionModal #copy')[0];
+const copy = document.querySelector('#show-media #copy');
+copy.style = 'border-color:#ccc'
+let source = document.querySelector('#show-media #text')
 
-copy.addEventListener('click', function () { 
-let source = document.querySelectorAll('#currentMediaSectionModal #text')[0]
-source.select()
-navigator.clipboard.writeText(source.value)
-copy.innerHTML = 'Copied!'
-copy.style = 'border-color:green'
-if (imageUrlSection = document.getElementById('image_url')) {
-    imageUrlSection.value = source.value
-    document.getElementById('image_url_label').style.backgroundImage = `url(${source.value})`
-    document.getElementById('currentMediaSectionModal').classList.add('hidden')
-    document.getElementsByClassName('media-modal-wrapper')[0].classList.add('hidden')
+if (typeof quickUploader !== 'undefined' && quickUploader == true) {
+    const purpose = copy.getAttribute('data-purpose');
+    copy.innerHTML = purpose;
+    copy.addEventListener('click', function () { 
+
+        if (purpose == 'Use' && (imageUrlSection = document.getElementById('image_url'))) {
+            imageUrlSection.value = source.value
+            document.getElementById('image_url_label').style.backgroundImage = `url(${source.value})`
+            document.getElementById('currentMediaSectionModal').classList.add('hidden')
+            document.getElementsByClassName('media-modal-wrapper')[0].classList.add('hidden')
+        }
+
+    })
+
+}else {
+    copy.addEventListener('click', function () { 
+        source.select()
+        navigator.clipboard.writeText(source.value)
+        
+        let initial = copy.textContent
+        copy.textContent = 'Copied!'
+        copy.style = 'border-color:green'
+        setTimeout(() => {
+            copy.textContent = initial;
+            copy.style = 'border-color:lightgray'
+        }, 3000) 
+    })
+
 }
-})
 
-var wrapperItem = document.getElementsByClassName('media-modal-wrapper-item')[0]
-wrapperItem.addEventListener('click', function (event) {
-    var self = event.target.closest('.media-modal-item')
-    if (!self) {
+if (typeof singleMedia === 'undefined') {
+        // Closing the modal block code
+        var wrapperItem = document.querySelector('.media-modal-wrapper-item')
+    wrapperItem.addEventListener('click', function (event) {
+        var self = event.target.closest('.media-modal-item')
+        if (!self) {
+            wrapperItem.classList.add('hidden')
+        }
+    })
+    document.querySelector('.media-modal-wrapper-item .close').addEventListener('click', function () {
         wrapperItem.classList.add('hidden')
-    }
-})
+    })
+}
 
 </script>
 <style>

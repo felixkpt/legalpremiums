@@ -10,7 +10,9 @@ class AuthorController extends Controller
 {
     protected $perPage = 15;
     public function index() {
-        $authors = User::with('posts')->limit(213)->paginate(5) ;
+        $authors = User::with('posts')->whereHas('posts', function ($q) {
+            $q->where('post_user.post_id', '>', 0);
+        })->paginate(5) ;
         // dd($authors);
         $data = ['title' => 'Post Authors', 'description' => 'Post Authors', 'authors' => $authors];
         return view('authors/index', $data);   
@@ -21,10 +23,10 @@ class AuthorController extends Controller
             return redirect()->back()->with('warning', 'Whoops! Author not found.');
         }
         $posts = Post::where('post_type', 'post')->whereHas('author', function($q) use($author) {
-            $q->where([['post_user.user_id', $author->id], ['post_user.manager_id', $author->id]]);
+            $q->where([['post_user.user_id', $author->id]]);
         })->orderBy('updated_at', 'desc')->paginate($this->perPage);
         
-        $title = 'Companies reviewed by '.$author->name;
+        $title = 'Companies reviewed by '.$author->name.' ('.$posts->total().')';
         $description = $title;
         $data = ['title' => $title, 'description' => $description, 'author' => $author, 'posts' => $posts];
         return view('authors/show', $data);   

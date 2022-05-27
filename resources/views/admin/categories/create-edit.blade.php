@@ -34,7 +34,7 @@
             <div class="my-4">
                 <div class="flex flex-wrap w-full justify-between">
                     <div class="w-full md:w-1/2 h-48">
-                        <?php $image = isset($category) ? $category->image : ''; $label = 'Category image' ?>
+                        <?php $image = isset($category->image) ? $category->image : ''; $purpose = 'Use'; $label = 'Category image' ?>
                         @include('/admin/media/components/quick-uploader')
                     </div>
                     <div class="w-full md:w-1/2 text-right mt-2 md:mt-auto">

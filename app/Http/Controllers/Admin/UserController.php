@@ -17,6 +17,7 @@ class UserController extends Controller
 {
     public $image_rules = 'mimes:jpg,png,jpeg,gif|min:2|max:2024|dimensions:min_width=100,min_height=100,max_width=2000,max_height=2000';
     protected $route = 'admin.users';
+    protected $perPage = 20;
     /**
      * Display a listing of the resource.
      *
@@ -24,8 +25,22 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $users = User::where('is_active', true)->orderBy('id','DESC')->paginate(30);
-        return view('admin/users/index', ['users' => $users]);
+        $title = 'All users';
+        if (($role = $request->get('role')) && $role !== 'Subscriber') {
+
+            $role = Role::where('name', $role)->first();
+            if (!$role) {
+                return redirect()->back()->with('warning', 'Whoops! Role not found.');
+            }
+            $users = User::role($role)->orderBy('updated_at', 'desc')->paginate($this->perPage);
+            $users->appends(['role' => $role]);
+            $title = 'All Users with role '.$role->name.' ('.$users->total().')';
+        }else {
+            $users = User::where('is_active', true)->orderBy('id','DESC')->paginate($this->perPage);
+            $title = 'All users ('.$users->total().')';
+        }
+        
+        return view('admin/users/index', ['users' => $users, 'title' => $title]);
     }
     
     /**
@@ -123,7 +138,7 @@ class UserController extends Controller
         $rules = [
             'name' => 'required',
             'email' => 'required|email|unique:users,email,'.$id,
-            'roles' => 'required'
+            'roles' => 'nullable|array'
         ];
         if ($request->get('confirm-password')) {
             $rules['password'] = ['same:confirm-password'];

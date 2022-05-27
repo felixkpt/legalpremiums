@@ -27,7 +27,7 @@
     <div class="mx-auto sm:mx-0">
         <div class="flex flex flex-col w-3/4 sm:w-2/3 justify-center md:justify-end">
             <label class="flex text-gray-600 font-medium">User Avatar:</label>
-            <?php $image = $user->avatar; $name = 'avatar'; ?>
+            <?php $image = isset($user->avatar) ? $user->avatar : ''; $name = 'avatar'; ?>
             @include('/admin/components/image_upload')
         </div>
     </div>

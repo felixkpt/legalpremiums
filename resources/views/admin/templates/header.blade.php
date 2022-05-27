@@ -12,7 +12,8 @@
     <script>
         url = <?php echo json_encode(url('')) ?>+'/';
         asset = <?php echo json_encode(asset('')) ?>;
-        const siteInfo = {url: url, admin_url: url+'admin', asset: asset}
+        fullUrl = <?php echo json_encode(\request()->fullUrl()) ?>;
+        const siteInfo = {url: url, admin_url: url+'admin', asset: asset, fullUrl: fullUrl}
     </script>
 </head>
 <body class="bg-blue-50 dark" style="margin: 0;padding:0;" id="app">

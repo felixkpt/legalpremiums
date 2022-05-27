@@ -2,7 +2,14 @@
 <div class="flex flex-col px-3">
 
     <div class="flex flex-wrap w-full justify-center shadow rounded-lg">
-        <div class="w-full sm:w-10/12">
+        <div class="w-full sm:w-11/12">
+            <div class="flex justify-between overflow-hidden w-auto text-left border-b-2 border-gray-300 pb-2">
+                <div class="flex">
+                    <h2 class="text-2xl">{{ $title }}</h2>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap w-full mt-3">
             <?php foreach($reviews as $key =>  $review): ?>
             <div class="flex flex-wrap justify-between w-full bg-gray-50 hover:bg-gray-100 p-1 mb-1">
                 <div class="w-full mb-1">
@@ -11,7 +18,7 @@
                         @csrf
                         <input type="hidden" name="_method" value="post">
                         <input type="hidden" name="id" value="{{ $review->id }}">
-                        <button class="inline bg-gray-500 hover:bg-gray-800 rounded-lg font-thin text-center px-8 text-white">Approve</a>
+                        <button class="inline bg-gray-500 hover:bg-gray-800 rounded-lg fonrt-normal text-center px-8 text-white">Approve</a>
                     </form>
                     @endif
                 </div>
@@ -32,17 +39,18 @@
                         </div>
                     </div>
                     <div class="flex justify-between w-auto text-slate-700 dark:text-slate-500 h-max">
-                        <a class="flex bg-purple-500 hover:bg-purple-800 rounded-lg font-thin text-center px-8 mr-1 text-white" href="{{ url('admin/reviews/'.$review->id.'/show') }}">Show</a>
+                        <a class="flex bg-purple-500 hover:bg-purple-800 rounded-lg fonrt-normal text-center px-8 mr-1 text-white" href="{{ url('admin/reviews/'.$review->id.'/show') }}">Show</a>
                         <form action="{{ route('admin.reviews.destroy') }}" method="post">
                             @csrf
                             <input type="hidden" name="_method" value="delete">
                             <input type="hidden" name="id" value="{{ $review->id }}">
-                            <button class="flex bg-red-500 hover:bg-red-800 rounded-lg font-thin text-center px-8 text-white">Delete</a>
+                            <button class="flex bg-red-500 hover:bg-red-800 rounded-lg fonrt-normal text-center px-8 text-white">Delete</a>
                         </form>
                     </div>
                 </div>
             </div>       
             <?php endforeach; ?>
+            </div>
             @if(count($reviews) < 1)
             <div class="flex w-full bg-gray-100">
                 <div class="flex flex-col w-full">

@@ -26,6 +26,10 @@ class CategoryController extends Controller
         })->orderBy('updated_at', 'desc')->paginate($this->perPage);
 
         $title = 'Best '.$category->name.' services';
+        if ($category->id == 1) {
+            $title = $category->name.' services';
+        }
+        
         $data = ['title' => $title, 'description' => '', 'category' => $category, 'posts' => $posts];
         return view('categories/show', $data);
     }

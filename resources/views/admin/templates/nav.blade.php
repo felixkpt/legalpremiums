@@ -28,6 +28,9 @@ $nav_items = ['User Roles' => 'admin/users/roles', 'Posts' => 'admin/posts',]
                     <div id="dropdownNavbar" class="hidden bg-white text-base z-10 list-none divide-y divide-gray-100 rounded shadow my-4 w-44" data-popper-placement="bottom" data-popper-reference-hidden="" data-popper-escaped="" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(0px, 10px);">
                         <ul class="py-1" aria-labelledby="dropdownLargeButton">
                             <li>
+                                <a href="{{ route('admin.users.show', Auth::user()->id) }}" class="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2">My Account</a>
+                            </li>
+                            <li>
                                 <a href="{{ route('admin.users.index') }}" class="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2">Users</a>
                             </li>
                             <li>

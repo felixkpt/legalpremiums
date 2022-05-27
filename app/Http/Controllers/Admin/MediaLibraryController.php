@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\admin;
 
+use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use App\Models\MediaLibrary;
@@ -26,12 +27,26 @@ class MediaLibraryController extends Controller
      */
     public function index(Request $request)
     {
-        $media = MediaLibrary::latest()->with('author')->paginate($this->perPage);
-        if ($request->wantsJson()) {
-            return response()->json($media);
+        $title = 'All Media';
+        if ($slug = $request->get('author')) {
+            $author = User::where('slug', $slug)->first();
+            if (!$author) {
+                return redirect()->back()->with('warning', 'Whoops! Author not found.');
+            }
+            $media = MediaLibrary::where('user_id', $author->id)->with('author')->orderby('created_at', 'DESC')->paginate($this->perPage);
+            $media->appends(['author' => $author->slug]);
+            $title = 'Media uploaded by '.$author->name.' ('.$media->total().')';
+        }else {
+            $media = MediaLibrary::latest()->with('author')->paginate($this->perPage);
+            $title = 'All Media ('.$media->total().')';
         }
 
-        return view($this->route.'.index', ['media' => $media]);
+        $data = ['media' => $media, 'title' => $title, 'url' => $request->fullUrl()];
+        if ($request->wantsJson()) {
+            return response()->json($data);
+        }
+
+        return view($this->route.'.index', $data);
     }
 
     /**
@@ -86,8 +101,12 @@ class MediaLibraryController extends Controller
             $mime = $file->getMimeType();
             $data = ['user_id' => Auth::user()->id, 'url' => $url, 'type' => $type, 'mime' => $mime, 'size' => $size, 'width' => $width, 'height' => $height];
 
-            MediaLibrary::create($data);
-            return response(['message' => 'success', 'mime' => $mime]);
+            $media = MediaLibrary::create($data);
+            if ($media) {
+                $media = MediaLibrary::where('id', $media->id)->with('author')->first();
+                return response()->json($media);
+            }
+            return response()->json(['error' => 'Server Error']);
         }
     }
 
