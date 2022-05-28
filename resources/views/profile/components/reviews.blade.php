@@ -1,8 +1,10 @@
 <div class="shadow pb-3 mt-3 pt-5 px-3" id="reviews">
-    <div class="flex flex-wrap w-full">
+    <div class="w-full">
         @foreach($reviews as $review)
-        <div class="w-full">
-            <hr>
+        <div class="flex flex-wrap w-full my-2">
+            <div class="w-full">
+                <hr>
+            </div>
             <h4 class="text-lg font-medium">
                 <a class="text-yellow-500 hover:text-yellow-700" href="{{ url('companies/'.$review->post->slug) }}">
                 Reviewing {{ $review->post->company_name }}
