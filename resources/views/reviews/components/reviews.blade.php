@@ -1,4 +1,5 @@
 <div class="shadow pb-3 mt-3 pt-5 px-3" id="reviews">
+    <h2>User reviews ({{ $reviews->total() }}) </h2>
     <div class="w-full">
         @foreach($reviews as $review)
         <div class="flex flex-wrap w-full my-2">
