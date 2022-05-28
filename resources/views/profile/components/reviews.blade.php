@@ -19,9 +19,13 @@
                 </div>
             </div>
             <div class="w-full sm:w-9/12 lg:w-10/12 mt-3">
-                <h4 class="mb-1 text-xl text-center sm:text-left">{{ $review->title }}</h4>
-                @include('/reviews/components/review-stars')
-                <p class="mb-0 text-center sm:text-left">{!! $review->content !!}</p>
+                <div class="flex flex-col flex-wrap justify-between w-full dd">
+                    <h4 class="mb-1 text-xl text-gray-600 font-medium text-center sm:text-left">{{ $review->title }}</h4>
+                    <div style="align-self: end;" class="w-full">
+                        @include('/reviews/components/review-stars')
+                    </div>
+                </div>
+                <p class="w-full mb-0 text-center sm:text-left">{!! $review->content !!}</p>
             </div>
             @if(Auth::user() && $review->user_id == Auth::user()->id)
             @if($review->published == 'unapproved')

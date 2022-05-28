@@ -1,5 +1,5 @@
 <div class="shadow pb-3 mt-3 pt-5 px-3" id="reviews">
-    <h2>User reviews ({{ $reviews->total() }}) </h2>
+    <h2 class="text-gray-700 font-medium">User reviews ({{ $reviews->total() }}) </h2>
     <div class="w-full">
         @foreach($reviews as $review)
         <div class="flex flex-wrap w-full my-2">
@@ -21,7 +21,7 @@
                 
             </div>
             <div class="w-full md:w-10/12 mt-3">
-                <h4 class="mb-1 text-xl font-medium text-center md:text-left">{{ $review->title }}</h4>
+                <h4 class="mb-1 text-xl text-gray-600 font-medium text-center md:text-left">{{ $review->title }}</h4>
                 @include('/reviews/components/review-stars')
                 <p class="mb-0 text-center md:text-left">{!! $review->content !!}</p>
             </div>
