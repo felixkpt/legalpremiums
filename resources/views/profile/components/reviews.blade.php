@@ -28,8 +28,8 @@
                     <div class="w-full md:w-9/12">
                         <div class="alert alert-info"><strong>Info: </strong>Your review is awaiting moderation. In the mean time you can edit where necessary.</div>
                     </div>
-                    <div class="w-full md:w-3/12">
-                    <a class="btn btn-sm main-outline-btn" href="{{ url('add-a-review/'.$review->post_id) }}">Edit my review</a>
+                    <div class="w-full md:w-3/12 m-auto">
+                    <a class="btn btn-sm main-outline-btn pt-2" href="{{ url('add-a-review/'.$review->post_id) }}">Edit my review</a>
                     </div>
                 </div>
             </div>
