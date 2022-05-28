@@ -6,7 +6,7 @@
                 <div class="w-full md:w-2/3">
                     </div>
                     <div class="alert alert-info"><strong>Info: </strong>Your review is awaiting moderation. In the mean time you can edit when necessary. Once approved, it will be public and therefore you may not edit it.</div>
-                <div class="w-full md:w-1/3">
+                <div class="w-full md:w-1/3 p-1">
                     <a href="{{ url('write-a-review/'.$post->id) }}" class="main-outline-btn"><small><i class="ti-comment-alt mr-2"></i></small> Edit your review </a>
                 </div>
             </div>

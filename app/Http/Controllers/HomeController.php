@@ -29,7 +29,7 @@ class HomeController extends Controller
         }
 
         $categories = Category::latest()->limit(8)->get();
-        $posts = Post::latest()->limit(6)->get();
+        $posts = Post::where([['post_type', '=', 'post'], ['published', '=', 'published']])->latest()->limit(6)->get();
         $reviews = Review::latest()->limit(5)->get();
 
         $slider_title = 'Search To Know If A Website Is Safe';

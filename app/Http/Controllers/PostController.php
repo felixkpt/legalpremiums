@@ -135,7 +135,7 @@ class PostController extends Controller
         $categories = $post->categories->toArray();
         if (count($categories) > 0) {
             $categories = array_column($categories, 'id');
-            $posts = Post::where('post_type', 'post')->whereHas('category', function($q) use($categories) {
+            $posts = Post::where([['post_type', '=', 'post'], ['published', '=', 'published']])->whereHas('category', function($q) use($categories) {
                 $q->where('post_category.category_id','>', $categories);
             })->orderBy('updated_at', 'desc')->paginate($this->perPage);
             return $posts;

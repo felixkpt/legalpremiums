@@ -64,4 +64,9 @@
                     <hr class="my-1">
                 </div>
                 <div class="w-full lg:w-9/12">
+                    @if (!isset($hide_notification) || !$hide_notification)
+                    <div class="w-full">
+                        @include('/components/notification')
+                    </div> 
+                    @endif
                     <div class="w-full">

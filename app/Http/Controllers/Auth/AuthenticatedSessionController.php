@@ -32,7 +32,7 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request, MessageBag $message_bag)
     {
         if (User::where(['email' => $request->post('email'), 'is_active' => false])->first()) {
-            $message_bag->add('in_actsive', 'Account is not acitve');
+            $message_bag->add('in_active', 'Account is not acitve');
             return redirect()->back()->withErrors($message_bag);
         }
         $request->authenticate();

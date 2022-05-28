@@ -49,3 +49,12 @@ h3 {
 .bg-lc-warning {
     @apply bg-sky-500;
 }
+.border-error { 
+    @apply border-red-500
+}
+.alert {
+    @apply border-2 border-2 p-2 rounded m-1
+}
+.alert-info {
+    @apply border-cyan-500 bg-cyan-200
+}
