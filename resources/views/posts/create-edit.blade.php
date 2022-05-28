@@ -8,7 +8,7 @@
             <input type="hidden" name="id" value="{{ @$post->id }}">
             <div class="mb-4 w-full">
                 <label for="company_name">Company name</label>
-                <input type="text" id="company_name" class="form-control" name="company_name" value="{{ old('company_name') ?: @$post->company_name }}">
+                <input type="text" id="company_name" class="w-full" name="company_name" value="{{ old('company_name') ?: @$post->company_name }}">
             </div>
             <div class="mb-4 w-full">
                 <label for="company_url">Company url</label>
@@ -19,11 +19,11 @@
                     $url = $scheme.$url;
                 }
                 ?>
-                <input type="url" id="company_url" class="form-control" name="company_url" value="{{ $url }}">
+                <input type="url" id="company_url" class="w-full" name="company_url" value="{{ $url }}">
             </div>
             <div class="mb-4 w-full">
                 <label for="title">Title </label>
-                <input type="text" id="title" class="form-control" name="title" value="{{ old('title') ?: @$post->title }}">
+                <input type="text" id="title" class="w-full" name="title" value="{{ old('title') ?: @$post->title }}">
             </div>
             <div class="mb-4">
                 <label for="content">Content </label>
@@ -33,11 +33,11 @@
                 </div>
             </div>
             <div class="mb-4">
-                <?php $image_name = 'image'; ?>
+                <?php $image_name = 'image'; $image = isset($post->image) ? $post->image : '' ?>
                 @include('/components/image_upload')
             </div>
             <div class="mb-4">
-                <button class="btn secondary-btn">Publish</button>
+                <button class="main-outline-btn">Publish</button>
             </div>
         </form>
     </div>

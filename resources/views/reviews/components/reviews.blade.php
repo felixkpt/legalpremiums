@@ -18,7 +18,7 @@
         </div>
         <div class="w-full md:w-10/12 mt-3">
             <h4 class="mb-1 text-xl font-medium text-center md:text-left">{{ $review->title }}</h4>
-            @include('/posts/components/review-stars')
+            @include('/reviews/components/review-stars')
             <p class="mb-0 text-center md:text-left">{!! $review->content !!}</p>
         </div>
         @if(Auth::user() && $review->user_id == Auth::user()->id)

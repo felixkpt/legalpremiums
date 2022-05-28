@@ -23,7 +23,7 @@ class ReviewController extends Controller
         $title = 'You are writing a review on '.$post->company_name;
         $description = 'Write a review on an insurance company';
         $data = ['title' => $title, 'description' => $description, 'post' => $post, 'review' => $review, 'route' => $this->route.'.store', 'method' => 'post', 'hide_notification' => true, 'max_words' => $this->max_words];
-        return view('posts/reviews/create', $data);
+        return view('reviews/create', $data);
     }
     
     public function store(Request $request) {

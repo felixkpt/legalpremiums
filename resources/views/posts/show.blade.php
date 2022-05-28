@@ -10,9 +10,9 @@
             </div>
         </div>
         <hr>
-        @include('/posts/components/leave-a-review')
+        @include('/reviews/components/leave-a-review')
     </div>
-    @include('/posts/components/reviews')
+    @include('/reviews/components/reviews')
     @include('/posts/components/share')
     @include('/posts/components/related')
 </div>

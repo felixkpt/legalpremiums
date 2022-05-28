@@ -19,7 +19,7 @@ class ReviewSeeder extends Seeder
      *
      * @return void
      */
-    public function run($counts = 2500)
+    public function run($counts = 20500)
     {
         $this->faker = Factory::create();
 
@@ -38,7 +38,7 @@ class ReviewSeeder extends Seeder
                     $content = '<p>'.implode('</p><p>', $this->faker->paragraphs($this->faker->numberBetween(1, 3))).'</p>';
 
                     $fields = ['title' => $title, 'content' => $content, 'post_id' => $post_id,
-                    'user_id' => $user_id, 'rating' => $this->faker->randomElement(range(0, 5)) ];
+                    'user_id' => $user_id, 'rating' => $this->faker->randomElement(range(0, 10)) ];
                     // dd($fields);
                     //  Review not pubished until approved by admin
                     // if (!$author->can('role-list')) {

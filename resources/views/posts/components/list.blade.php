@@ -8,7 +8,7 @@
             </a>
         </div>
         <div class="w-full md:w-9/12 lg:w-10/12">
-            <a style="font-size:24px" class="" href="{{ url('companies/'.$post->slug) }}">{{ $post->title }}</a>
+            <a class="text-lg" href="{{ url('companies/'.$post->slug) }}">{{ $post->title }}</a>
             @include('/posts/components/authors-section')
         </div>
     </div>

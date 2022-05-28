@@ -17,7 +17,7 @@
                     <a href="{{ url('companies/'.$post->slug) }}">{{ Str::limit($post->title, 100) }}</a>
                 </h4>
             </div>
-            @include('/posts/components/reviews-info')
+            @include('/reviews/components/reviews-info')
         </div>
         @endforeach
     </div>

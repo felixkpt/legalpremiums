@@ -23,7 +23,7 @@ class PostSeeder extends Seeder
      *
      * @return void
      */
-    public function run($counts = 20)
+    public function run($counts = 205)
     {
         $this->faker = Factory::create();
 
@@ -91,7 +91,7 @@ class PostSeeder extends Seeder
                     PostContent::create(['post_id' => $post->id, 'content' => $content]);
 
                     // Attaching authors (post_user table)
-                    $take_arr = [1,1,1,1,2,2,3];
+                    $take_arr = [1,1,1,1,1,2,2,3];
                     shuffle($take_arr);
                     $take = $take_arr[0];
 
@@ -102,12 +102,20 @@ class PostSeeder extends Seeder
                         $post->authors()->attach($user, ['manager_id' => $manager_id]);
                     }
                     
-                    // Attaching categories
+                    // Attaching categories zero is uncategorized
+                    $take_arr = [0,0,0,0,1,1,1,2,2,3];
                     shuffle($take_arr);
                     $take = $take_arr[0];
-                    $categories = Category::inRandomOrder()->take($take)->pluck('id');
-                    foreach($categories as $category) {
-                        $post->categories()->attach($category);
+                    if ($take > 0) {
+                        $categories = Category::inRandomOrder()->take($take)->pluck('id');
+                        foreach($categories as $category) {
+                            $post->categories()->attach($category);
+                        }
+                    }else {
+                        $category = Category::where('slug', 'uncategorized')->first();
+                        if ($category) {
+                            $post->categories()->attach($category->id);
+                        }
                     }
                     
                     DB::commit();

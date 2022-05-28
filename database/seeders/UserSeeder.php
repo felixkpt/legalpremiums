@@ -20,7 +20,8 @@ class UserSeeder extends Seeder
     {
     
         if (!User::take(1)->first()) {
-            exit('Not found any admin user, register first.');
+            
+            exit('Before we continue please register at least 1 account first on the frontend. The account will be used as admin default account.');
         }
         for($i=0; $i<$counts; $i++) {
             
@@ -48,7 +49,7 @@ class UserSeeder extends Seeder
 
             if (isset($url) && !User::where('email', $email)->first()) {
                 
-                $user =  User::create([
+                User::create([
                     'name' => $name = trim($first_name.' '.$last_name),
                     'slug' => Str::slug($name),
                     'email' => $email,
@@ -58,8 +59,6 @@ class UserSeeder extends Seeder
                     'avatar' => $url,
                 ]);
 
-                $user->assignRole('Subscriber');
-                
             }
         }
     }

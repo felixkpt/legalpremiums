@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\MediaLibrary;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
@@ -88,8 +89,12 @@ class PostController extends Controller
         
         $this->updateRating($post);
         
-        $data = ['title' => $title, 'description' => $description, 'post' => $post, 'post_type' => $this->post_type, 'reviews' => $reviews];
+        $related = $this->related($post);
+        $trending = Review::orderby('updated_at', 'desc')->limit(5)->get();
+        // dd($trending);
+        $data = ['title' => $title, 'description' => $description, 'post' => $post, 'post_type' => $this->post_type, 'reviews' => $reviews, 'related' => $related, 'trending' => $trending];
         return view('posts/show', $data);
+
     }
 
     private function updateRating(&$post) {
@@ -122,11 +127,29 @@ class PostController extends Controller
 
     }
 
+    /** 
+     * Related posts
+     */
+
+    public function related($post) {
+        $categories = $post->categories->toArray();
+        if (count($categories) > 0) {
+            $categories = array_column($categories, 'id');
+            $posts = Post::where('post_type', 'post')->whereHas('category', function($q) use($categories) {
+                $q->where('post_category.category_id','>', $categories);
+            })->orderBy('updated_at', 'desc')->paginate($this->perPage);
+            return $posts;
+        }
+        return [];
+
+    }
+
     /**
      * Public user writing a new post
      */
     public function writePost() {
-        return view('posts/create', ['route' => $this->route.'.store', 'method' => 'post']);
+        $title = 'Write a review';
+        return view('posts/create', ['route' => $this->route.'.store', 'method' => 'post', 'title' => $title]);
     }
 
     /**
@@ -134,9 +157,9 @@ class PostController extends Controller
      */
     public function editPost($post_id) {
         $post = Post::findOrFail($post_id);
-        $user_id = Auth::user()->id;
+        $title = 'Edit a review';
         
-        return view('posts/edit', ['route' => $this->route.'.update', 'method' => 'patch', 'post' => $post]);
+        return view('posts/edit', ['route' => $this->route.'.update', 'method' => 'patch', 'post' => $post, 'title' => $title]);
     }
 
     /**
@@ -163,9 +186,7 @@ class PostController extends Controller
              $rules = ['company_name' => 'required|string|min:3|max:150|unique:posts,company_name'.($post_id ? ','.$post_id : ''),
                 'content' => 'required|string|min:3|max:2000000',
                 ];
-             if ($request->hasFile('image')) {
-                 $rules = array_merge($rules, ['image' => $this->image_rules]);
-             }
+           
              $request->validate($rules);
              
              $company_name = ucfirst(trim($request->get('company_name')));
@@ -179,12 +200,47 @@ class PostController extends Controller
                 $data['published'] = 'unapproved';
              }
 
-             if ($request->hasFile('image')) {
-                 $path = $request->file('image')->store('public/images/posts');
-                 $path = preg_replace('#public/#', 'uploads/', $path);
-                 $data['image'] = $path;
-             }
-             
+            if ($request->hasFile('image')) {
+                $rules = array_merge($rules, ['image' => $this->image_rules]);
+                $request->validate($rules);
+                
+                $file = $request->file('image');
+                
+                $dir = 'public/'.date('Y').'/'.date('m');
+                
+                $path = $file->store($dir);
+                chmod(storage_path('app/public/'.date('Y')),0775);
+                chmod(storage_path('app/'.$dir),0775);
+                $path = preg_replace('#public/#', 'uploads/', $path);
+
+                $url = asset($path);
+                
+                // Getting image dimensions
+                $imagesize = getimagesize($url);
+                $width = $imagesize[0];
+                $height = $imagesize[1];
+                // Getting image size
+                $image = get_headers($url, 1);
+                $bytes = $image["Content-Length"] ?? $image["content-length"];
+                $kb = round($bytes/(1024));
+                $mb = round($bytes/(1024 * 1024));
+                $size = $kb.' KB';
+                if ($mb >= 1) {
+                    $size = $mb.' MB';
+                }
+                
+                $type = $file->getType();
+                $mime = $file->getMimeType();
+                $dat = ['user_id' => Auth::user()->id, 'url' => $url, 'type' => $type, 'mime' => $mime, 'size' => $size, 'width' => $width, 'height' => $height];
+
+                $media = MediaLibrary::create($dat);
+                if ($media) {
+                    $media = MediaLibrary::where('id', $media->id)->with('author')->first();
+                }
+                
+                $data['image'] = $media->url;
+            }
+
              try {
                  DB::beginTransaction();
              
@@ -211,7 +267,7 @@ class PostController extends Controller
                  DB::rollback();
              }
      
-             return redirect()->to('company/'.$post->slug)->with('success', 'Company review was '.($post_id ? 'updated.' : 'created'));
+             return redirect()->to('companies/'.$post->slug)->with('success', 'Company review was '.($post_id ? 'updated.' : 'created'));
                 
     }
 
