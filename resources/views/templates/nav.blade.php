@@ -15,11 +15,11 @@
 				<div id="dropdownNavbar" class="hidden bg-white text-base z-10 list-none divide-y divide-gray-100 rounded shadow my-4 w-44" data-popper-placement="bottom" data-popper-reference-hidden="" data-popper-escaped="" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(0px, 10px);">
 					<ul class="py-1" aria-labelledby="dropdownLargeButton">
 						<li>
-							<a href="{{ url('profile/'.Auth::user()->slug) }}" class="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2">My Profile</a>
+							<a href="{{ url('profile/'.Auth::user()->slug) }}" class="text-sm hover:bg-gray-100 text-gray-600 block px-4 py-2">My Profile</a>
 						</li>
 						@if (Auth::user()->role('Admin'))
 						<li>
-							<a href="{{ route('admin.index') }}" class="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2">Dashboard</a>
+							<a href="{{ route('admin.index') }}" class="text-sm hover:bg-gray-100 text-gray-600 block px-4 py-2">Dashboard</a>
 						</li>
 						@endif
 					</ul>
