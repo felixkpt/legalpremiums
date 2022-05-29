@@ -9,6 +9,11 @@
                     @include('/posts/components/list')
                 </div>
             </div>
+            <div class="flex justity-center w-full py-4">
+            <div class="flex mx-auto">
+                <a class="main-btn" href="{{ url('profile/'.$author->slug) }}">Profile & Reviews by {{ $author->name }}</a>
+            </div>
+        </div>
         </div>
     </div>
 </div>
