@@ -11,6 +11,11 @@
             <a class="text-lg" href="{{ url('companies/'.$post->slug) }}">{{ $post->title }}</a>
             @include('/posts/components/authors-section')
         </div>
+        @if (Auth::user() && in_array(Auth::user()->id, array_column($post->authors->toArray(), 'id')))
+            @if($post->published == 'unapproved')
+            @include('/posts/components/notify-unapproved')
+            @endif
+        @endif
     </div>
     <?php endforeach; ?>
 @if (count($items) < 1)

@@ -255,7 +255,7 @@ class PostController extends Controller
                  
                     PostContent::where('post_id', $post_id)->update(['content' => $content]);
                     // Attaching author
-                    $authors = json_decode(json_encode($post->mainAuthors), true);
+                    $authors = $post->mainAuthors->toArray();
                     if (!in_array($user_id, array_column($authors, 'id'))) {
                         $post->authors()->attach($user_id, ['manager_id' => $user_id]);
                     }
