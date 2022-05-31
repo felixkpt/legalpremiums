@@ -216,6 +216,10 @@
 
     if (typeof quickUploader === 'undefined') {
         updateMedia(siteInfo.fullUrl)
+        // Handling click back state
+        window.addEventListener('popstate', function(e){
+            updateMedia(document.location.href, true, false)
+        });
     }else {
         updateMedia(siteInfo.url+'admin/media', false, false)
     }
