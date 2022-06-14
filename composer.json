@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
+        "doctrine/dbal": "^3.3",
         "fabpot/goutte": "^4.0",
         "glhd/gretel": "^1.5",
         "guzzlehttp/guzzle": "^7.2",

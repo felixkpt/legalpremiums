@@ -14,8 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('posts', function (Blueprint $table) {
-            $table->integer('reviews')->default(0);
-            $table->integer('rating')->default(0);
+            $table->integer('rating')->default(1)->change();
         });
     }
 
