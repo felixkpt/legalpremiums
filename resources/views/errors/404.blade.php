@@ -3,16 +3,9 @@
     <div id="notfound">
         <div class="notfound">
             <div class="notfound-404">
-                <h1>404</h1>
+                <h1 class="text-3xl">404 Not found</h1>
             </div>
-            <h2>Oops! Nothing was found</h2>
-            <p>The page you are looking for might have been removed had its name changed or is temporarily unavailable. <a class="link-default" href="{{ url('') }}">Return to homepage</a></p>
-            <div class="notfound-social">
-                <a href="#"><i class="fab fa-facebook"></i></a>
-                <a href="#"><i class="fab fa-twitter"></i></a>
-                <a href="#"><i class="fab fa-pinterest"></i></a>
-                <a href="#"><i class="fab fa-google-plus"></i></a>
-            </div>
+            <p class="text-xl font-bold text-gray-600">The page you are looking for might have been removed had its name changed or is temporarily unavailable. <a class="text-yellow-900 hover:text-yellow-700" href="{{ url('') }}">Return to homepage</a></p>
         </div>
     </div>
 </div>

@@ -1,9 +1,9 @@
-<div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
 	@foreach($posts as $post)
 	<div class="flex flex-col">
 			<div class="post-img p-2">
-				<a href="{{ url('companies/'.$post->slug) }}" title="{{ $post->title }}">
-					<div style="width:100%;height:320px">
+				<a href="{{ url('companies/'.$post->slug) }}" title="{{ $post->title }}" class="flex justify-center">
+					<div style="width:100%;max-width:200px;height:200px">
 						<img class="img" src="{{ asset($post->image) }}" alt="">
 					</div>
 					<div class="post-format-icons">

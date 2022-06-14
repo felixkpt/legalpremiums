@@ -31,7 +31,7 @@
             border-radius: 50%;
             text-align: center;
             border: 3px solid #fff!important;
-            left: 28px;
+            left: 35%;
             bottom: -18px;
             line-height: 30px;
             z-index: 5;
@@ -46,6 +46,9 @@
         }
     </style>
     <script src="{{ asset('js/flowbite.js') }}"></script>
+    @if (Route::current()->getName() == 'posts.show')
+    @include('/posts/components/schema')
+    @endif
 </head>
 <body class="body">
     @if ($_SERVER['HTTP_HOST'] != 'localhost')
