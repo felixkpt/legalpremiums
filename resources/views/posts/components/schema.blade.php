@@ -9,7 +9,7 @@ $sameAs = [
 ];
 $logo = [ '@id' => url('#/schema/ImageObject/Logo/1')];
 $email = 'support@legalpremiums.com';
-$permalink = url('company/'.$post->slug);
+$permalink = url('companies/'.$post->slug);
 
 
 $context = ["@context" => "https://schema.org"];
