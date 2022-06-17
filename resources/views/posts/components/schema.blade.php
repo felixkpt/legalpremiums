@@ -55,7 +55,7 @@ $WebPage = [
     "@type" => "WebPage",
     "@id" => $permalink,
     "url" => $permalink,
-    "name" => "Upwork Reviews",
+    "name" => $post->company_name,
     "description" => Str::limit(strip_tags($post->content->content), 120),
     "isPartOf" => [ "@id" => url('').("/#schema/WebSite/1") ],
     "inLanguage" => "en-US",
