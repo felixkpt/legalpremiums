@@ -59,10 +59,9 @@ $WebPage = [
     "description" => Str::limit(strip_tags($post->content->content), 120),
     "isPartOf" => [ "@id" => url('').("/#schema/WebSite/1") ],
     "inLanguage" => "en-US",
-    "breadcrumb" => [ "@id" => $permalink."#/schema/BreadcrumbList/1" ],
     "about" => [ "@id" => url('').("/#schema/Organization/".$post->company_name) ],
     "mainEntity" => [ "@id" => url('').("/#schema/Organization/".$post->company_name) ],
-    "primaryImageOfPage" => [ "@id" => url('').("/#schema/ImageObject/".$post->company_name) ],
+    "primaryImageOfPage" => [ "@id" => $post->image ],
     "hasPart" => [ "@id" => url('').("/#schema/DataSet/".$post->company_name."/1") ]
 ];
 
