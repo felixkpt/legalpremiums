@@ -1,8 +1,9 @@
 <?php 
-
-$name = \Site::name();
+use App\InformationSite;
+use Illuminate\Support\Str;
+$name = Site::name();
 $legalName = $name.' Ltd';
-$description = \Site::description();
+$description = Site::description();
 $sameAs = [
     
     'https://www.facebook.com/LegalPremiumsLtd',
