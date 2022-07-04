@@ -3,9 +3,9 @@
 		<div class="top flex flex-wrap w-full">
 		<div class="grid grid-cols-1 md:grid-cols-3 gap-1">
 			<div class="flex flex-wrap">
-				<h3 class="text-2xl text-gray-50 font-medium w-full">{{ \Site::name() }}</h3>
+				<h3 class="text-2xl text-gray-50 font-medium w-full">{{ \SiteInfo::name() }}</h3>
 				<p class="text-gray-400 font-medium">
-				{{ \Site::description() }}
+				{{ \SiteInfo::description() }}
 				</p>
 			</div>
 			<div class="flex flex-wrap">
@@ -28,7 +28,7 @@
 		</div>
 		<div class="flex w-full bg-yellow-900">
 			<div class="bottom py-4">
-				<small class="text-yellow-500">Copyright @ {{ date('Y') }} <a href="{{ url('') }}">{{ \Site::name() }}</a></small>
+				<small class="text-yellow-500">Copyright @ {{ date('Y') }} <a href="{{ url('') }}">{{ \SiteInfo::name() }}</a></small>
 			</div> 	
 		</div>
 	</div>

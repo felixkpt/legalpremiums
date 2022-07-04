@@ -181,6 +181,7 @@ return [
         TeamTNT\Scout\TNTSearchScoutServiceProvider::class,
         Laravel\Scout\ScoutServiceProvider::class,
 
+        App\Providers\SiteInfoServiceProvider::class,
     ],
 
     /*
@@ -195,7 +196,7 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
-        'Site' => App\Services\Information\SiteFacade::class,
+        'SiteInfo' => App\Settings\SiteInfo::class,
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 

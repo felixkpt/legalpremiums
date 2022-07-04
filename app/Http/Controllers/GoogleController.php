@@ -42,6 +42,10 @@ class GoogleController extends Controller
                 $saveUser = User::where('email', $user->getEmail())->first();
             }
 
+            // Check if any user is register
+            if (User::count() == 1) {
+                $saveUser->assignRole('Admin');
+            }
 
             Auth::loginUsingId($saveUser->id);
 

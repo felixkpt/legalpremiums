@@ -9,6 +9,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Settings\SiteInfo;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -19,8 +20,28 @@ class AuthenticatedSessionController extends Controller
      */
     public function create()
     {
-        $data = ['title' => 'Login', 'description' => 'Login', 'hide_sidebar' => true, 'hide_notification' => true];
+        $title = 'Login | '.SiteInfo::name();
+        $description = 'Login, Sign in | '.SiteInfo::name();
+        $data = ['title' => $title, 'description' => $description, 'hide_sidebar' => true, 'hide_notification' => true];
         return view('auth.login', $data);
+    }
+
+    function loginEmail(Request $request) {
+        $name = $request->get('email') ?? session()->get('email');
+        $user = User::where('email', '=', $name)->orWhere('slug', '=', $name)->first();
+        if (!$user) {
+            return redirect()->to('login')->with('danger', 'Username/Email not found.');
+        }
+        if ($user->google_id) {
+            return redirect()->to('login')->with('danger', 'Account is associated with google. Please login with google.');
+        }
+
+        $email = $user->email;
+        session()->put(['email' => $email]);
+        
+         $data = ['title' => 'Login with email', 'description' => 'Login in with your email', 'hide_sidebar' => true, 'hide_notification' => true, 'email' => $email];
+         return view('auth.login-email', $data);
+ 
     }
 
     /**
@@ -36,6 +57,7 @@ class AuthenticatedSessionController extends Controller
             return redirect()->back()->withErrors($message_bag);
         }
         $request->authenticate();
+        // dd($request->all());
 
         $request->session()->regenerate();
 

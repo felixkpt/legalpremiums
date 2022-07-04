@@ -10,13 +10,14 @@ use App\Models\Post;
 use App\Models\Review;
 use App\Models\PostContent;
 use Illuminate\Http\Request;
+use App\Settings\Reviews;
 
 class PostController extends Controller
 {
      /**
      * @param string $image_rules
      */
-    private $image_rules = 'mimes:jpg,png,jpeg,gif|min:2|max:2024|dimensions:min_width=100,min_height=100,max_width=2000,max_height=2000';
+    private $image_rules = 'mimes:jpg,png,jpeg,gif,webp|min:2|max:2024|dimensions:min_width=100,min_height=100,max_width=2000,max_height=2000';
     protected $route = 'write-a-review';
     private $post_type = 'post';
     private $perPage = 20;
@@ -110,7 +111,11 @@ class PostController extends Controller
 
             $totals = 0;
             foreach($reviews as $review) {
-                $totals += $review->rating;
+                $rat = $review->rating;
+                if ($rat > Reviews::stars()) {
+                    Review::find($review->id)->update(['rating' => Reviews::stars()]);
+                }
+                $totals += $rat;
             }
             $rating = $totals / $ct;
             $parts = explode('.', $rating);
@@ -149,7 +154,8 @@ class PostController extends Controller
      */
     public function writePost() {
         $title = 'Write a review';
-        return view('posts/create', ['route' => $this->route.'.store', 'method' => 'post', 'title' => $title]);
+        $description = 'Review a freelancing company, Write a review post';
+        return view('posts/create', ['route' => $this->route.'.store', 'method' => 'post', 'title' => $title, 'description' => $description, 'require_editor' => true]);
     }
 
     /**
@@ -158,8 +164,9 @@ class PostController extends Controller
     public function editPost($post_id) {
         $post = Post::findOrFail($post_id);
         $title = 'Edit a review';
+        $description = 'Edit existing review';
         
-        return view('posts/edit', ['route' => $this->route.'.update', 'method' => 'patch', 'post' => $post, 'title' => $title]);
+        return view('posts/edit', ['route' => $this->route.'.update', 'method' => 'patch', 'post' => $post, 'title' => $title, 'description' => $description, 'require_editor' => true]);
     }
 
     /**
@@ -210,7 +217,7 @@ class PostController extends Controller
                 
                 $path = $file->store($dir);
                 chmod(storage_path('app/public/'.date('Y')),0775);
-                chmod(storage_path('app/'.$dir),0775);
+                chmod(storage_path('app/public/'.date('Y').'/'.date('m')),0775);
                 $path = preg_replace('#public/#', 'uploads/', $path);
 
                 $url = asset($path);
@@ -267,7 +274,7 @@ class PostController extends Controller
                  DB::rollback();
              }
      
-             return redirect()->to('companies/'.$post->slug)->with('success', 'Company review was '.($post_id ? 'updated.' : 'created'));
+             return redirect()->to('company/'.$post->slug)->with('success', 'Company review was '.($post_id ? 'updated.' : 'created'));
                 
     }
 

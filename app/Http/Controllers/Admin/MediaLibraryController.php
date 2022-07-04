@@ -16,7 +16,7 @@ class MediaLibraryController extends Controller
      * @param string $image_rules
      * 
      */
-    private $image_rules = 'mimes:jpg,png,jpeg,gif';
+    private $image_rules = 'mimes:jpg,png,jpeg,gif,svg,webp';
 
     private $route = 'admin.media';
     private $perPage = 30;
@@ -78,15 +78,19 @@ class MediaLibraryController extends Controller
             
             $path = $file->store($dir);
             chmod(storage_path('app/public/'.date('Y')),0775);
-            chmod(storage_path('app/'.$dir),0775);
+            chmod(storage_path('app/public/'.date('Y').'/'.date('m')),0775);
             $path = preg_replace('#public/#', 'uploads/', $path);
-
+            
             $url = asset($path);
             
             // Getting image dimensions
             $imagesize = getimagesize($url);
-            $width = $imagesize[0];
-            $height = $imagesize[1];
+            $width = 0;
+            $height = 0;
+            if ($imagesize) {
+                $width = $imagesize[0];
+                $height = $imagesize[1];
+            }
             // Getting image size
             $image = get_headers($url, 1);
             $bytes = $image["Content-Length"] ?? $image["content-length"];

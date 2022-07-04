@@ -19,10 +19,10 @@
 			</h2>
 			<p>{{ Str::limit(strip_tags($post->content->content), 355) }}</p>
 			<div class="flex w-full space-x-2 my-1">
-				<a href="{{ url('companies/'.$post->slug) }}" class="flex py-1 px-3 bg-yellow-900 text-gray-50 hover:bg-yellow-700 rounded">
+				<a href="{{ url('companies/'.$post->slug) }}" class="btn btn-primary">
 					Full article
 				</a>
-				<a href="{{ url('companies/'.$post->slug) }}#reviews" class="flex py-1 px-3 bg-gray-50 text-gray-600 hover:text-gray-50 hover:bg-yellow-700 rounded border border-gray-200">
+				<a href="{{ url('companies/'.$post->slug) }}#reviews" class="btn btn-secondary">
 					{{ $post->reviews }} Reviews
 				</a>
 			</div>

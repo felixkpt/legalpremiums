@@ -7,7 +7,6 @@ use App\Models\Option;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\Post;
-use App\Http\Requests\StorePostRequest;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\PostContent;
@@ -20,7 +19,8 @@ class PostController extends Controller
     protected $post_type = 'post';
     protected $route = 'admin.posts';
     protected $perPage = 20;
-    
+    protected $max_words = 150;
+
     /**
      * Display a listing of the resource.
      *
@@ -35,29 +35,27 @@ class PostController extends Controller
             if (!$author) {
                 return redirect()->back()->with('warning', 'Whoops! Author not found.');
             }
-            $posts = Post::where('post_type', $this->post_type)->whereHas('author', function($q) use($author) {
+            $posts = Post::where('post_type', $this->post_type)->whereHas('author', function ($q) use ($author) {
                 $q->where([['post_user.user_id', $author->id]]);
             })->orderBy('updated_at', 'desc')->paginate($this->perPage);
             $posts->appends(['author' => $slug]);
-            $title = 'All Posts by '.$author->name.' ('.$posts->total().')';
-   
-        }elseif ($slug = $request->get('category')) {
+            $title = 'All Posts by ' . $author->name . ' (' . $posts->total() . ')';
+        } elseif ($slug = $request->get('category')) {
             $category = Category::where('slug', $slug)->first();
             if (!$category) {
                 return redirect()->back()->with('warning', 'Whoops! Category not found.');
             }
-            $posts = Post::where('post_type', $this->post_type)->whereHas('category', function($q) use($category) {
+            $posts = Post::where('post_type', $this->post_type)->whereHas('category', function ($q) use ($category) {
                 $q->where([['post_category.category_id', $category->id]]);
             })->orderBy('updated_at', 'desc')->paginate($this->perPage);
             $posts->appends(['category' => $slug]);
-            $title = 'All Posts in the category '.$category->name.' ('.$posts->total().')';
-   
-        }else {
+            $title = 'All Posts in the category ' . $category->name . ' (' . $posts->total() . ')';
+        } else {
             $posts = Post::where('post_type', $this->post_type)->with('authors')->orderBy('updated_at', 'desc')->paginate($this->perPage);
-            $title = 'All Posts ('.Post::where('post_type', $this->post_type)->count().')';
+            $title = 'All Posts (' . Post::where('post_type', $this->post_type)->count() . ')';
         }
-        
-        return view($this->route.'.index', ['posts' => $posts, 'route' => $this->route, 'title' => $title]);
+
+        return view($this->route . '.index', ['posts' => $posts, 'route' => $this->route, 'title' => $title]);
     }
 
     /**
@@ -67,7 +65,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view($this->route.'.create', ['route' => $this->route.'.index', 'method' => 'post']);
+        return view($this->route . '.create', ['route' => $this->route . '.index', 'method' => 'post', 'require_editor' => true]);
     }
 
     /** 
@@ -75,45 +73,56 @@ class PostController extends Controller
      * @param \Illuminate\Http\Requests\StorePostReqoest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StorePostRequest $request) {
-        // The incoming request is valid....
-   
-        $rules = [];
+    public function store(Request $request)
+    {
+
+        $rules = [
+            'company_name' => 'required|string|min:3|max:150|unique:posts,company_name',
+            'title' => 'required|string|min:3|max:150|unique:posts,title',
+            'slug' => 'nullable|string|min:3|max:150|unique:posts,slug',
+            'description' => [
+                'nullable', 'string',
+                'min:100', 'max:160'
+            ],
+            'content' => 'required|string|min:3|max:2000000',
+        ];
+
         $request->validate($rules);
-        
+
         $user_id = Auth::user()->id;
         $company_name = ucfirst(trim($request->get('company_name')));
         $company_url = $request->get('company_url');
         $slug = Str::of($request->post('slug') ?? $company_name)->slug('-')->value();
         $title = ucfirst(trim($request->post('title')));
         $content = ucfirst($request->get('content'));
-        $data = ['company_name' => $company_name, 'company_url' => $company_url, 'title' => $title, 'slug' => $slug, 'description' => Str::limit(strip_tags($content), 150), 'user_id' => $user_id, 'post_type' => $this->post_type];
+        $description =  ucfirst($request->get('description')) ?: Str::limit(strip_tags($content), 150);
+        $data = ['company_name' => $company_name, 'company_url' => $company_url, 'title' => $title, 'slug' => $slug, 'description' => $description, 'user_id' => $user_id, 'post_type' => $this->post_type];
         if ($image_url = $request->get('image_url')) {
             $data['image'] = $image_url;
         }
-        
+
         try {
             DB::beginTransaction();
-        
+
             $post = Post::create($data);
-            
+
             PostContent::create(['post_id' => $post->id, 'content' => $content]);
             // Attaching author
             $post->authors()->attach($user_id, ['manager_id' => $user_id]);
             // Attaching categories
             if ($request->get('categories')) {
-                foreach($request->get('categories') as $category) {
+                foreach ($request->get('categories') as $category) {
                     $post->categories()->attach($category);
                 }
             }
 
             DB::commit();
-        
         } catch (Throwable $e) {
-            DB::rollback();var_dump($e->getMessage());
+            DB::rollback();
+            var_dump($e->getMessage());
         }
-        
-        return redirect()->to($request->post('redirect'))->with('success', ucfirst($this->post_type).' was created.');
+
+        return redirect()->to($request->post('redirect'))->with('success', ucfirst($this->post_type) . ' was created.');
     }
 
     /**
@@ -126,7 +135,7 @@ class PostController extends Controller
     {
         $post = Post::where('post_type', $this->post_type)->where('id', $id)->first();
         // dd($post->categories);
-        return view($this->route.'.edit', ['route' => $this->route.'.update', 'method' => 'patch', 'post' => $post]);
+        return view($this->route . '.edit', ['route' => $this->route . '.update', 'method' => 'patch', 'post' => $post, 'require_editor' => true]);
     }
 
     /**
@@ -141,25 +150,30 @@ class PostController extends Controller
 
         $user_id = Auth::user()->id;
         $rules = [
-            'company_name' => 'required|string|min:3|max:150|unique:posts,company_name,'.$request->id,
-            'title' => 'required|string|min:3|max:150|unique:posts,title,'.$request->id,
-            'slug' => 'nullable|string|min:3|max:150|unique:posts,slug,'.$request->id,
+            'company_name' => 'required|string|min:3|max:150|unique:posts,company_name,' . $request->id,
+            'title' => 'required|string|min:3|max:150|unique:posts,title,' . $request->id,
+            'slug' => 'nullable|string|min:3|max:150|unique:posts,slug,' . $request->id,
+            'description' => [
+                'nullable', 'string',
+                'min:100', 'max:160'
+            ],
             'content' => 'required|string|min:3|max:2000000',
         ];
 
         $request->validate($rules);
-        
+
         $company_name = ucfirst(trim($request->get('company_name')));
         $company_url = $request->get('company_url');
         $slug = Str::of($request->post('slug') ?? $company_name)->slug('-')->value();
-                
+
         $title = ucfirst(trim($request->post('title')));
         $content = ucfirst($request->get('content'));
-        $data = ['company_name' => $company_name, 'company_url' => $company_url, 'title' => $title, 'slug' => $slug, 'description' => Str::limit(strip_tags($content), 150),];
+        $description =  ucfirst($request->get('description')) ?: Str::limit(strip_tags($content), 150);
+        $data = ['company_name' => $company_name, 'company_url' => $company_url, 'title' => $title, 'slug' => $slug, 'description' => $description];
         if ($image_url = $request->get('image_url')) {
             $data['image'] = $image_url;
         }
-        
+
         try {
             DB::beginTransaction();
 
@@ -174,25 +188,25 @@ class PostController extends Controller
             // Attaching categories
             if ($request->get('categories')) {
                 $categories = $post->categories->toArray();
-                foreach($request->get('categories') as $category) {
+                foreach ($request->get('categories') as $category) {
                     if (!in_array($category, array_column($categories, 'id'))) {
                         $post->categories()->attach($category);
                     }
                 }
             }
-    
+
             DB::commit();
-        
         } catch (Throwable $e) {
             DB::rollback();
         }
 
-        return redirect()->to($request->post('redirect'))->with('success', ucfirst($this->post_type).' was updated.');
+        return redirect()->to($request->post('redirect'))->with('success', ucfirst($this->post_type) . ' was updated.');
     }
 
-    public function approve(Request $request) {
+    public function approve(Request $request)
+    {
         Post::where('post_type', $this->post_type)->find($request->get('id'))->update(['published' => 'published']);
-        return redirect()->back()->with('success', ucfirst($this->post_type).' approved.');
+        return redirect()->back()->with('success', ucfirst($this->post_type) . ' approved.');
     }
     /**
      * Remove the specified resource from storage.
@@ -203,6 +217,6 @@ class PostController extends Controller
     public function destroy(Request $request)
     {
         Post::where('post_type', $this->post_type)->find($request->get('id'))->delete();
-        return redirect()->back()->with('danger', ucfirst($this->post_type).' deleted.');
+        return redirect()->back()->with('danger', ucfirst($this->post_type) . ' deleted.');
     }
 }

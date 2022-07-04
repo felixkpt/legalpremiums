@@ -53,7 +53,7 @@ class PageController extends Controller
      */
     public function create()
     {
-        return view($this->route.'.create', ['route' => $this->route.'.index', 'method' => 'post']);
+        return view($this->route.'.create', ['route' => $this->route.'.index', 'method' => 'post', 'require_editor' => true]);
     }
 
     /** 
@@ -114,7 +114,7 @@ class PageController extends Controller
     public function edit($id)
     {
         $post = Post::where('post_type', $this->post_type)->where('id', $id)->with('content')->first();
-        return view($this->route.'.edit', ['route' => $this->route.'.update', 'method' => 'patch', 'post' => $post]);
+        return view($this->route.'.edit', ['route' => $this->route.'.update', 'method' => 'patch', 'post' => $post, 'require_editor' => true]);
     }
 
     /**

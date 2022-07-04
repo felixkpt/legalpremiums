@@ -1,7 +1,8 @@
-@include('/components/Trumbowyg-editor')
 <div class="flex flex-wrap w-full justify-center m-1">
-    <?php 
+    <?php
+
     use App\Models\Option;
+
     $show_in_homepage = false;
     if (isset($post)) {
         $option = Option::where('name', 'show_in_homepage')->first();
@@ -17,7 +18,7 @@
             <input type="hidden" name="redirect" value="{{ url()->previous() }}">
             <input type="hidden" name="id" value="{{ isset($post) ? $post->id : 0 }}">
             <div class="w-full mb-4">
-                <input type="checkbox" <?php if($show_in_homepage) echo 'checked'; ?> class="m-1" name="show_in_homepage" id="use"><label for="use">Show in homepage</label>
+                <input type="checkbox" <?php if ($show_in_homepage) echo 'checked'; ?> class="m-1" name="show_in_homepage" id="use"><label for="use">Show in homepage</label>
             </div>
             <div class="mb-4 w-full">
                 <label for="title">Title </label>
@@ -29,9 +30,16 @@
                 <small class="text-gray-500">The “slug” is the URL-friendly version of the name. It is usually all lowercase and contains only letters, numbers, and hyphens.</small>
             </div>
             <div class="mb-4 w-full">
-                <label for="content">Content </label>
-                <div class="w-full">
-                    <div id="editor" class="trumbowyg-editor" contenteditable="true" dir="ltr" style="height: 224.922px;">
+                <div class="w-full" id="contentSection">
+                    <label for="content">Content </label>
+                    <textarea id="content" name="content" rows="15" class="w-full">
+                    {{ old('content') ?: @$post->content->content }}
+                    </textarea>
+                    <div>
+                        <?php
+                        $content_count = @str_word_count(old('content') ?: $post->content) ?: 0;
+                        ?>
+                        <small class="text-gray-500 italic">Words: <span id="contentCount">{{ $content_count }}</span></small>
                     </div>
                 </div>
             </div>
@@ -41,17 +49,20 @@
         </form>
     </div>
 </div>
-<script defer>
-    jQuery(function() {
-        // Open a modal box
-        $('#editor').trumbowyg({
-            // btns: [['strong', 'em',], ['insertImage']],
-            autogrow: true,
-        });
-        $('.trumbowyg-textarea').attr('name', 'content')
-
-        let content = <?php echo json_encode(old('content') ?: @$post->content->content) ?>;
-        $('#editor').trumbowyg('html', content);
-
-    })
+<script>
+    $('#contentSection #content').summernote({
+        placeholder: 'Start typing...',
+        tabsize: 2,
+        height: 520,
+        toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'underline', 'clear']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['table', ['table']],
+            ['insert', ['link', 'picture', 'video']],
+            ['view', ['fullscreen', 'codeview', 'help']]
+        ]
+    });
+    wordCounter('#contentSection .note-editable', '#contentCount', false)
 </script>

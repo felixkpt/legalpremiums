@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use \Site;
+use \App\Settings\SiteInfo;
 use App\Models\Category;
 use App\Models\Option;
 use App\Models\Post;
@@ -18,7 +18,7 @@ class HomeController extends Controller
     public function index() {
         $option = Option::where('name', 'show_in_homepage')->first();
         
-        $title = Site::title();
+        $title = SiteInfo::title();
         $post = null;
         if ($option) {
             $post = Post::where('id', $option->id)->first();
@@ -33,7 +33,7 @@ class HomeController extends Controller
         $reviews = Review::latest()->limit(5)->get();
 
         $slider_title = 'Search To Know If A Website Is Safe';
-        $description = $slider_description = Site::description();
+        $description = $slider_description = SiteInfo::description();
         $slides = [
             ['image' => 'http://localhost/lancercommunity/public/uploads/images/2022/05/categories/b8LF12Y4vrwzoFsz.jpg',
             'title' => 'Giving you best protection online',

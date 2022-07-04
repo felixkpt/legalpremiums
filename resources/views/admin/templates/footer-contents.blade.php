@@ -68,7 +68,7 @@
                 
             </div>
             <div class="py-6 px-4 bg-gray-700 md:flex md:items-center md:justify-between">
-                <span class="text-sm text-gray-300 sm:text-center">© 2022 <a href="{{ route('home') }}">{{ \Site::name() }}</a>. All Rights Reserved. </span>
+                <span class="text-sm text-gray-300 sm:text-center">© 2022 <a href="{{ route('home') }}">{{ \SiteInfo::name() }}</a>. All Rights Reserved. </span>
                 <div class="flex mt-4 space-x-6 sm:justify-center md:mt-0">
                         <a href="#" class="text-gray-400 hover:text-white">
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">

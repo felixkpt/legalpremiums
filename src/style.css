@@ -3,12 +3,33 @@
 @tailwind utilities;
 
 .body {
-    background-color: #dadada;
-    background-image: url(http://localhost/legalpremiums/public/images/background.jpg);
-    background-repeat: repeat;
-    background-attachment: scroll;
-    background-position: left top;
+    background-color:#dadada;
+    background-image:url(http://localhost/legalpremiums/public/images/background.jpg);
+    background-repeat:repeat;
+    background-attachment:scroll;
+    background-position:left top;
 }
+
+[type='text'],
+[type='checkbox'],
+[type='email'],
+[type='url'],
+[type='password'],
+[type='number'],
+[type='date'],
+[type='datetime-local'],
+[type='month'],
+[type='search'],
+[type='tel'],
+[type='time'],
+[type='week'],
+[multiple],
+textarea,
+select {
+    border-radius:5px;
+    outline:none;
+}
+
 main {
     @apply min-h-screen pt-3 px-1 md:px-3 bg-white
 }
@@ -16,45 +37,98 @@ main {
 footer {
     @apply pt-3 bg-yellow-800;
 }
+
 footer .top {
-    @apply px-1 md:px-3; 
-    min-height: 180px;
+    @apply px-1 md:px-3;
+    min-height:180px;
 }
+
 footer .bottom {
-    @apply px-1 md:px-3; 
+    @apply px-1 md:px-3;
 }
 
 h1 {
-    @appy text-3xl font-bold text-gray-700;
+    @apply text-4xl my-4 rounded-sm font-medium text-gray-800;
 }
+
 h2 {
-    @apply text-2xl font-bold text-gray-700
+    @apply text-3xl my-3 rounded-sm font-medium text-gray-700;
 }
 
 h3 {
-    @apply text-xl font-bold text-gray-700
+    @apply text-2xl my-2 rounded-sm font-medium text-gray-700;
 }
-.main-btn {
-    @apply py-1 px-3 bg-yellow-900 text-gray-50 hover:bg-yellow-700 rounded
+
+h4 {
+    @apply text-xl my-1 rounded-sm font-medium text-gray-700;
 }
-.main-outline-btn {
-    @apply py-1 px-3 bg-gray-50 text-yellow-700 hover:text-gray-50 hover:bg-yellow-700 rounded border border-yellow-700
+
+h5 {
+    @apply text-lg my-1 rounded-sm font-medium text-gray-700;
 }
-.secondary-btn {
-    @apply py-1 px-3 bg-gray-50 text-gray-600 hover:text-gray-50 hover:bg-yellow-700 rounded border border-gray-200
+
+h6 {
+    @apply text-base my-1 rounded-sm font-medium text-gray-700;
 }
+
 .text-lc-warning {
     @apply text-sky-500;
 }
+
+.btn {
+    @apply bg-transparent px-3 py-2 border border-solid rounded-lg transition ease-in-out font-medium text-center outline outline-offset-1 outline-2 outline-[transparent]
+}
+
+.btn-success {
+    @apply bg-[#31940a] hover:bg-[#067a06] border-gray-300 text-[#fafafa] focus:outline-[#31940a]
+}
+
+.btn-outline-success {
+    @apply bg-transparent hover:bg-[#067a06] border-[#067a06] hover:border-[transparent] text-gray-700 hover:text-[#fafafa] focus:outline-[#31940a]
+}
+
+.main-btn {
+    @apply py-1 px-3 bg-yellow-900 text-gray-50 hover:bg-yellow-700 rounded
+}
+
+.main-outline-btn {
+    @apply py-1 px-3 bg-gray-50 text-yellow-700 hover:text-gray-50 hover:bg-yellow-700 rounded border border-yellow-700
+}
+
+.btn-primary {
+    @apply bg-yellow-900 text-gray-50 hover:bg-yellow-700
+}
+.btn-secondary {
+    @apply bg-gray-50 text-gray-600 hover:text-gray-50 hover:bg-yellow-700 border-gray-300
+}
+
 .bg-lc-warning {
     @apply bg-sky-500;
 }
-.border-error { 
+
+.border-error {
     @apply border-red-500
 }
+
 .alert {
     @apply border-2 border-2 p-2 rounded m-1
 }
+
 .alert-info {
     @apply border-cyan-500 bg-cyan-200
+}
+
+.h-divider {
+    position:relative;
+    padding:30px 0;
+}
+
+.h-divider>.h-inner {
+    text-align:center;
+    box-shadow:inset 0 -11px 0 #fff, inset 0 -12px #333;
+}
+
+.h-divider>.h-inner>span {
+    background:white;
+    padding:0 10px;
 }

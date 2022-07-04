@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
+use App\Settings\SiteInfo;
 
 class PasswordResetLinkController extends Controller
 {
@@ -15,7 +16,10 @@ class PasswordResetLinkController extends Controller
      */
     public function create()
     {
-        $data = ['title' => 'Forgot password', 'description' => 'Forgot password', 'hide_sidebar' => true, 'hide_notification' => true];
+        $email = session()->get('email');
+        $title = 'Forgot password | '.SiteInfo::name();
+        $description = 'Forgot password, reset password | '.SiteInfo::name();
+        $data = ['title' => $title, 'description' => $description, 'hide_sidebar' => true, 'hide_notification' => true, 'email' => $email];
         return view('auth.forgot-password', $data);
     }
 

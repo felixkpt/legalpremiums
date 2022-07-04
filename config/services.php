@@ -32,9 +32,9 @@ return [
     ],
 
     'google' => [
-        'client_id' => '', //USE FROM Google DEVELOPER ACCOUNT
-        'client_secret' => 'key', //USE FROM Google DEVELOPER ACCOUNT
-        'redirect' => 'http://localhost/mbti-project/google/callback/'
+        'client_id' => env('CLIENT_ID'), //USE FROM Google DEVELOPER ACCOUNT
+        'client_secret' => env('CLIENT_SECRET'), //USE FROM Google DEVELOPER ACCOUNT
+        'redirect' => '/google/callback/'
     ],
 
 ];

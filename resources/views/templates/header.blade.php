@@ -68,7 +68,15 @@
         gtag('config', 'G-2ND73Q1BXP');
     </script>
     @endif
+    @if (isset($require_editor) && $require_editor)
+    <script src="{{ asset('admin/js/script.js?v=').Str::random(10) }}"></script>
+    <script src="{{ asset('js/jquery-3.4.1.slim.min.js') }}"></script>
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+    <link href="{{ asset('summernote/styles.css') }}" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+    @endif
 </head>
+
 <body class="body">
     @if ($_SERVER['HTTP_HOST'] != 'localhost')
     <div id="fb-root"></div>

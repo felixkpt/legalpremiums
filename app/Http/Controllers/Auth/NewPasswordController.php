@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
+use App\Settings\SiteInfo;
 
 class NewPasswordController extends Controller
 {
@@ -20,7 +21,9 @@ class NewPasswordController extends Controller
      */
     public function create(Request $request)
     {
-        $data = ['title' => 'Reset password', 'description' => 'Reset password', 'hide_sidebar' => true, 'hide_notification' => true, 'request' => $request];
+        $title = 'Reset password | '.SiteInfo::name();
+        $description = 'Reset password | '.SiteInfo::name();
+        $data = ['title' => $title, 'description' => $description, 'hide_sidebar' => true, 'hide_notification' => true, 'request' => $request];
         return view('auth.reset-password', $data);
     }
 
