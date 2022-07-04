@@ -4,7 +4,7 @@
         <div class="w-10/12 sm:w-8/12 md:w-7/12 lg:w-5/12 bg-white shadow-md rounded m-4 p-2">
             @include('/components/notification')
             <div class="flex w-full">
-                <div id="account-chooser" class="w-full md:w-8/12 mx-auto">
+                <div id="account-chooser" class="w-full md:w-10/12 mx-auto">
                     <div>
                         <h2 class="text-center pb-3">Account register</h2>
                     </div>
@@ -55,7 +55,7 @@
                                 <input class="w-full" id="password_confirmation" type="password" name="password_confirmation" required="required">
                             </div>
                             <div class="mb-4">
-                                <button type="submit" class="btn btn-success">
+                                <button type="submit" class="btn btn-success w-full">
                                     Register
                                 </button>
                             </div>
