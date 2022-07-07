@@ -6,7 +6,7 @@
             </div>
             
             
-            @include('/components/notification')
+            @include('/components/notifications/inline')
         <form method="POST" action="{{ route('password.confirm') }}">
             @csrf
 

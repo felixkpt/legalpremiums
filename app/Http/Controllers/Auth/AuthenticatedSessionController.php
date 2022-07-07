@@ -22,7 +22,7 @@ class AuthenticatedSessionController extends Controller
     {
         $title = 'Login | '.SiteInfo::name();
         $description = 'Login, Sign in | '.SiteInfo::name();
-        $data = ['title' => $title, 'description' => $description, 'hide_sidebar' => true, 'hide_notification' => true];
+        $data = ['title' => $title, 'description' => $description, 'hide_sidebar' => true, 'notification_type' => 'none'];
         return view('auth.login', $data);
     }
 
@@ -39,7 +39,7 @@ class AuthenticatedSessionController extends Controller
         $email = $user->email;
         session()->put(['email' => $email]);
         
-         $data = ['title' => 'Login with email', 'description' => 'Login in with your email', 'hide_sidebar' => true, 'hide_notification' => true, 'email' => $email];
+         $data = ['title' => 'Login with email', 'description' => 'Login in with your email', 'hide_sidebar' => true, 'notification_type' => 'none', 'email' => $email];
          return view('auth.login-email', $data);
  
     }

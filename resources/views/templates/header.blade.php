@@ -94,9 +94,11 @@
                     <hr class="my-1">
                 </div>
                 <div class="w-full lg:w-9/12">
-                    @if (!isset($hide_notification) || !$hide_notification)
-                    <div class="w-full">
-                        @include('/components/notification')
-                    </div>
+                    @if(!isset($notification_type) || $notification_type != 'none')
+                    @if(isset($notification_type) && $notification_type == 'toast')
+                    @include('/components/notifications/toast')
+                    @else
+                    @include('/components/notifications/inline')
+                    @endif
                     @endif
                     <div class="w-full">

@@ -5,7 +5,7 @@
             <div>
                 <h2 class="text-2xl text-left pb-3">Complete password reset</h2>
             </div>
-            @include('/components/notification')
+            @include('/components/notifications/inline')
 
             <form method="POST" action="{{ route('password.update') }}">
                 @csrf

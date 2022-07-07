@@ -6,7 +6,7 @@
             $ratings = range(1,5);
             $rating = old('rating') ?? @$review->rating;
             ?>
-            @include('components/notification')
+            @include('components/notifications/inline')
             <form action="{{ route($route) }}" method="post">
                 @csrf
                 <input type="hidden" name="review_id" value="{{ @$review->id }}">

@@ -24,7 +24,7 @@ class RegisteredUserController extends Controller
     {
         $title = 'Register | '.SiteInfo::name();
         $description = 'Register, Sign up | '.SiteInfo::name();
-        $data = ['title' => $title, 'description' => $description, 'hide_sidebar' => true, 'hide_notification' => true];
+        $data = ['title' => $title, 'description' => $description, 'hide_sidebar' => true, 'notification_type' => 'none'];
         return view('auth.register', $data);
     }
 

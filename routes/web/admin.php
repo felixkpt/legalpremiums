@@ -14,7 +14,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\UserRoleController;
 use App\Http\Controllers\Admin\MediaLibraryController;
 
-Route::middleware('permission:role-list')->name('admin.')->prefix('/admin')->group(function() {
+Route::middleware('role:Admin')->name('admin.')->prefix('/admin')->group(function() {
     
     Route::get('/', [AdminController::class, 'index'])->name('index')
     ->breadcrumb('Dashboard');

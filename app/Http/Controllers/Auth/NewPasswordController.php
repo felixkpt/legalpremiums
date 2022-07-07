@@ -23,7 +23,7 @@ class NewPasswordController extends Controller
     {
         $title = 'Reset password | '.SiteInfo::name();
         $description = 'Reset password | '.SiteInfo::name();
-        $data = ['title' => $title, 'description' => $description, 'hide_sidebar' => true, 'hide_notification' => true, 'request' => $request];
+        $data = ['title' => $title, 'description' => $description, 'hide_sidebar' => true, 'notification_type' => 'none', 'request' => $request];
         return view('auth.reset-password', $data);
     }
 

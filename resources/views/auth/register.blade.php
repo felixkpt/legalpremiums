@@ -1,8 +1,8 @@
 @include('/templates/header')
 <div class="flex flex-col w-full my-2">
     <div class="flex justify-center p-3">
-        <div class="w-10/12 sm:w-8/12 md:w-7/12 lg:w-5/12 bg-white shadow-md rounded m-4 p-2">
-            @include('/components/notification')
+        <div class="w-10/12 sm:w-9/12 md:w-8/12 lg:w-7/12 bg-white shadow-md rounded m-4 p-2">
+            @include('/components/notifications/inline')
             <div class="flex w-full">
                 <div id="account-chooser" class="w-full md:w-10/12 mx-auto">
                     <div>

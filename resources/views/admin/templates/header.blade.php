@@ -43,4 +43,10 @@
             <div class="flex flex-col justify-between">
                 <main class="flex flex-col overflow-x-hidden">
                     @include('/admin/templates/breadcrums')
-                    @include('/admin/components/notification')
+                    @if(!isset($notification_type) || $notification_type != 'none')
+                    @if(isset($notification_type) && $notification_type == 'inline')
+                    @include('/admin/components/notifications/inline')
+                    @else
+                    @include('/admin/components/notifications/toast')
+                    @endif
+                    @endif

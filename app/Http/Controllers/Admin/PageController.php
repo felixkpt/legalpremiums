@@ -32,18 +32,18 @@ class PageController extends Controller
             if (!$author) {
                 return redirect()->back()->with('warning', 'Whoops! Author not found.');
             }
-            $posts = Post::where('post_type', $this->post_type)->whereHas('author', function($q) use($author) {
+            $posts = Post::where('post_type', $this->post_type)->whereHas('author', function ($q) use ($author) {
                 $q->where([['post_user.user_id', $author->id], ['post_user.manager_id', $author->id]]);
             })->orderBy('updated_at', 'desc')->paginate($this->perPage);
             $posts->appends(['author' => $slug]);
-            $title = 'All Pages by '.$author->name.' ('.$posts->total().')';
-
-        }else {
+            $title = 'All Pages by ' . $author->name . ' (' . $posts->total() . ')';
+        } else {
             $posts = Post::where('post_type', $this->post_type)->with('authors')->orderBy('updated_at', 'desc')->paginate($this->perPage);
-            $title = 'All Pages ('.Post::where('post_type', $this->post_type)->count().')';
+            $title = 'All Pages (' . Post::where('post_type', $this->post_type)->count() . ')';
         }
-        
-        return view($this->route.'.index', ['posts' => $posts, 'route' => $this->route, 'title' => $title]);
+
+        $data = ['posts' => $posts, 'route' => $this->route, 'title' => $title];
+        return view($this->route . '.index', $data);
     }
 
     /**
@@ -53,7 +53,9 @@ class PageController extends Controller
      */
     public function create()
     {
-        return view($this->route.'.create', ['route' => $this->route.'.index', 'method' => 'post', 'require_editor' => true]);
+        $data = ['route' => $this->route . '.index', 'method' => 'post', 'require_editor' => true];
+        $data['notification_type'] = 'inline';
+        return view($this->route . '.create', $data);
     }
 
     /** 
@@ -61,8 +63,9 @@ class PageController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) {
-        
+    public function store(Request $request)
+    {
+
         $rules = [
             'title' => 'required|string|min:3|max:150|unique:posts,title',
             'slug' => 'nullable|string|min:3|max:150|unique:posts,slug',
@@ -75,13 +78,13 @@ class PageController extends Controller
         $slug = Str::of($request->post('slug') ?? $title)->slug('-')->value();
         $content = ucfirst($request->get('content'));
         $data = ['title' => $title, 'slug' => $slug, 'description' => Str::limit(strip_tags($content), 150), 'user_id' => $user_id, 'post_type' => $this->post_type];
-        
-        
+
+
         try {
             DB::beginTransaction();
-        
+
             $post = Post::create($data);
-        
+
             PostContent::create(['post_id' => $post->id, 'content' => $content]);
             // Attaching author
             $post->authors()->attach($user_id, ['manager_id' => $user_id]);
@@ -90,18 +93,17 @@ class PageController extends Controller
                 $option = Option::where('name', 'show_in_homepage')->first();
                 if (!$option) {
                     Option::create(['name' => 'show_in_homepage', 'value' => $post->id]);
-                }else {
+                } else {
                     Option::where('id', $option->id)->update(['value' => $post->id]);
                 }
             }
 
             DB::commit();
-        
         } catch (Throwable $e) {
             DB::rollback();
         }
-        
-        return redirect()->to($request->post('redirect'))->with('success', ucfirst($this->post_type).' was created.');
+
+        return redirect()->to($request->post('redirect'))->with('success', ucfirst($this->post_type) . ' was created.');
     }
 
 
@@ -114,7 +116,9 @@ class PageController extends Controller
     public function edit($id)
     {
         $post = Post::where('post_type', $this->post_type)->where('id', $id)->with('content')->first();
-        return view($this->route.'.edit', ['route' => $this->route.'.update', 'method' => 'patch', 'post' => $post, 'require_editor' => true]);
+        $data = ['route' => $this->route . '.update', 'method' => 'patch', 'post' => $post, 'require_editor' => true];
+        $data['notification_type'] = 'inline';
+        return view($this->route . '.edit', $data);
     }
 
     /**
@@ -127,22 +131,22 @@ class PageController extends Controller
     public function update(Request $request)
     {
         $rules = [
-            'title' => 'required|string|min:3|max:150|unique:posts,title,'.$request->id,
-            'slug' => 'nullable|string|min:3|max:150|unique:posts,slug,'.$request->id,
+            'title' => 'required|string|min:3|max:150|unique:posts,title,' . $request->id,
+            'slug' => 'nullable|string|min:3|max:150|unique:posts,slug,' . $request->id,
             'content' => 'required|string|min:3|max:2000000',
         ];
         $request->validate($rules);
-        
+
         $user_id = Auth::user()->id;
         $title = ucfirst(trim($request->post('title')));
         $slug = Str::of($request->post('slug') ?? $title)->slug('-')->value();
         $content = ucfirst($request->get('content'));
         $data = ['title' => $title, 'slug' => $slug, 'description' => Str::limit(strip_tags($content), 150),];
         $post = Post::where('post_type', $this->post_type)->find($request->id);
-        
+
         try {
             DB::beginTransaction();
-        
+
             $post = Post::where('post_type', $this->post_type)->find($request->id);
             $post->update($data);
             PostContent::where('post_id', $post->id)->update(['content' => $content]);
@@ -156,7 +160,7 @@ class PageController extends Controller
                 $option = Option::where('name', 'show_in_homepage')->first();
                 if (!$option) {
                     Option::create(['name' => 'show_in_homepage', 'value' => $post->id]);
-                }else {
+                } else {
                     Option::where('id', $option->id)->update(['value' => $post->id]);
                 }
             }
@@ -164,14 +168,13 @@ class PageController extends Controller
             elseif ($option = Option::where('name', 'show_in_homepage')->where('value', $post->id)->first()) {
                 Option::where('id', $option->id)->delete();
             }
-    
+
             DB::commit();
-        
         } catch (Throwable $e) {
             DB::rollback();
         }
 
-        return redirect()->to($request->post('redirect'))->with('success', ucfirst($this->post_type).' was updated.');
+        return redirect()->to($request->post('redirect'))->with('success', ucfirst($this->post_type) . ' was updated.');
     }
 
     /**
@@ -183,6 +186,6 @@ class PageController extends Controller
     public function destroy(Request $request)
     {
         Post::where('post_type', $this->post_type)->find($request->get('id'))->delete();
-        return redirect()->back()->with('danger', ucfirst($this->post_type).' deleted.');
+        return redirect()->back()->with('danger', ucfirst($this->post_type) . ' deleted.');
     }
 }

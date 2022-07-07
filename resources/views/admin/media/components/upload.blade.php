@@ -94,6 +94,7 @@
             
             if (xhr.readyState == 4 && xhr.status == 200) {
                
+                // console.log(xhr)
                 const item = xhr.responseText
                 const itemParsed = JSON.parse(item)
                 if (typeof itemParsed.error === 'undefined') {
@@ -110,7 +111,6 @@
                     uploadMessage.textContent = itemParsed.error
                     link.classList.remove('busy')
                     link.classList.add('not-allowed')
-        
                 }
 
             }

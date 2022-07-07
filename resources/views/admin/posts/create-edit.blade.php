@@ -33,7 +33,7 @@
 
                 <div class="mb-4 w-full">
                     <label for="title" class="text-gray-600">Title</label>
-                    <input type="text" id="title" class="basic-input" name="title" value="{{ old('title') ?: @$post->title }}">
+                    <input type="text" id="title" class="w-full" name="title" value="{{ old('title') ?: @$post->title }}">
                 </div>
                 <div class="mb-4 w-full">
                     <div class="w-full" id="contentSection">
