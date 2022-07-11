@@ -2,54 +2,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
     <title>{{ $title }}</title>
-    <link rel="icon" href="{{ url('') }}favicon.png">
+    <link rel="icon" href="favicon.png">
     <link href="{{ asset('') }}css/style.css?v={{ date('H:m:s') }}" rel="stylesheet">
-    <style>
-        .post-img .img {
-            object-fit: cover;
-            width: 100%;
-            height: 100%;
-        }
-
-        .post-box {
-            border: 1px solid gray;
-            /* max-width: 450px; */
-            overflow: hidden;
-        }
-
-        .post-data {
-            box-sizing: border-box;
-            padding: 15px 10px;
-        }
-
-        .post-img {
-            position: relative;
-            margin-bottom: 20px;
-        }
-
-        .post-format-icons {
-            position: absolute;
-            width: 30px;
-            height: 30px;
-            display: block;
-            border-radius: 50%;
-            text-align: center;
-            border: 3px solid #fff !important;
-            left: 35%;
-            bottom: -18px;
-            line-height: 30px;
-            z-index: 5;
-            transition: box-shadow 0.2s;
-            font-size: 12px;
-            /* border-color:#bb7e68; */
-            color: #fff;
-        }
-
-        .post-img:hover .post-format-icons svg {
-            background-color: rgb(99 49 18);
-            box-shadow: 0 0 0 3px rgb(99 49 18)
-        }
-    </style>
     <script src="{{ asset('js/flowbite.js') }}"></script>
     @if (Route::current()->getName() == 'posts.show')
     @include('/posts/components/schema')
