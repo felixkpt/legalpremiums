@@ -2,7 +2,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
     <title>{{ $title }}</title>
-    <link rel="icon" href="favicon.png">
+    <link rel="icon" href="favicon.ico">
     <link href="{{ asset('') }}css/style.css?v={{ date('H:m:s') }}" rel="stylesheet">
     <script src="{{ asset('js/flowbite.js') }}"></script>
     @if (Route::current()->getName() == 'posts.show')
