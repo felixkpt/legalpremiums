@@ -3,8 +3,8 @@
     foreach($items as $key =>  $post): ?>
     <div class="flex flex-wrap shadow p-1 mt-2">
         <div class="w-full md:w-4/12 lg:w-3/12 overflow-hidden">
-            <a class="block" style="margin: auto;width: max-content;" href="{{ url('companies/'.$post->slug) }}">
-                <img class="mx-auto rounded-lg" src="{{ $post->image }}" alt="{{ $post->company_name }} logo" style="height: 120px;width:auto;">
+            <a class="block shadow mx-auto" style="width:200px;height:200px" href="{{ url('companies/'.$post->slug) }}">
+                <img class="rounded-lg w-full" src="{{ $post->image }}" alt="{{ $post->company_name }} logo">
             </a>
         </div>
         <div class="w-full md:w-8/12 lg:w-9/12">

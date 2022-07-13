@@ -12,7 +12,7 @@ class SearchController extends Controller
         $results = null;
 
         if ($query = $request->get('query')) {
-            $results = Post::search($query)->paginate(5);
+            $results = Post::search($query)->where('post_type', 'post')->where('published', 'published')->paginate(5);
         }
         $title = 'Search results';
         $description = '';

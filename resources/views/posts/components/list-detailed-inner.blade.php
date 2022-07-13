@@ -2,11 +2,9 @@
     <div class="flex flex-wrap text-center lg:text-left justify-center space-y-2">
         <div class="md:w-3/12 overflow-hidden">
             <div class="flex flex-wrap justify-center">
-                <a href="{{ url('companies/'.$post->slug) }}">
-                <div class="bg-light" style="max-width: 150px;height:140px">
+                <a class="block shadow mx-auto" style="width:200px;height:200px" href="{{ url('companies/'.$post->slug) }}">
                     <?php $image = $post->image ? $post->image : asset('images/default-company.png') ?>
-                    <img style="height: 100%;width:100%;" class="mx-auto rounded-lg" src="{{ $image }}" alt="{{ $post->company_name }} logo">
-                </div>
+                    <img class="rounded-lg w-full" src="{{ $post->image }}" alt="{{ $post->company_name }} logo">
                 </a>
             </div>
         </div>
