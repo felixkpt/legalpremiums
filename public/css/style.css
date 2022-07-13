@@ -1730,6 +1730,10 @@ input:checked + .toggle-bg {
   border-left-width: 2px;
 }
 
+.border-l {
+  border-left-width: 1px;
+}
+
 .border-dashed {
   border-style: dashed;
 }
@@ -3869,16 +3873,16 @@ h6 {
     width: 91.666667%;
   }
 
+  .lg\:w-auto {
+    width: auto;
+  }
+
   .lg\:w-2\/12 {
     width: 16.666667%;
   }
 
   .lg\:w-10\/12 {
     width: 83.333333%;
-  }
-
-  .lg\:w-auto {
-    width: auto;
   }
 
   .lg\:grid-cols-3 {

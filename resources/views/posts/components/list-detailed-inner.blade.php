@@ -4,7 +4,7 @@
             <div class="flex flex-wrap justify-center">
                 <a href="{{ url('companies/'.$post->slug) }}">
                 <div class="bg-light" style="max-width: 150px;height:140px">
-                    <?php $image = @getimagesize($post->image) ? $post->image : asset('images/default-company.png') ?>
+                    <?php $image = $post->image ? $post->image : asset('images/default-company.png') ?>
                     <img style="height: 100%;width:100%;" class="mx-auto rounded-lg" src="{{ $image }}" alt="{{ $post->company_name }} logo">
                 </div>
                 </a>
@@ -16,10 +16,10 @@
             <hr />
             @include('/posts/components/rating')
         </div>
-        <div class="md:w-3/12 border-left">
-            <div class="flex flex-wrap w-full justify-center">
-                <a href="{{ url('companies/'.$post->slug) }}" class="btn main-btn btn-block mr-1"> Visit site <i class="ti-new-window ml-2"></i></a>
-                <a href="{{ url('companies/'.$post->slug) }}#reviews" class="btn btn-secondary btn-block"> Read Reviews <i class="ti-comments-smiley ml-2"></i></a>
+        <div class="md:w-3/12 border-l pl-1">
+            <div class="flex flex-wrap w-full justify-center flex-col">
+                <a href="{{ url('companies/'.$post->slug) }}" class="btn btn-primary mb-1"> Visit site <i class="ti-new-window ml-2"></i></a>
+                <a href="{{ url('companies/'.$post->slug) }}#reviews" class="btn btn-secondary"> Read Reviews <i class="ti-comments-smiley ml-2"></i></a>
             </div>
         </div>
     </div>
